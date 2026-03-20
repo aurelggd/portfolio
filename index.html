@@ -6,6 +6,35 @@
 <meta name="description" content="Dèlidji GBAGUIDI — Ingénieur logiciel Java, Spring Batch et DevOps."/>
 <title>Dèlidji GBAGUIDI — Ingénieur Logiciel</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<!-- Menu burger — défini tôt pour être disponible dès le premier tap -->
+<script>
+function toggleMenu(){
+  var ham = document.getElementById('hamburger');
+  var mob = document.getElementById('mobileMenu');
+  if(!ham || !mob) return;
+  var isOpen = mob.classList.contains('open');
+  if(isOpen){
+    ham.classList.remove('open');
+    mob.classList.remove('open');
+    ham.setAttribute('aria-expanded','false');
+    document.body.style.overflow='';
+  } else {
+    ham.classList.add('open');
+    mob.classList.add('open');
+    ham.setAttribute('aria-expanded','true');
+    document.body.style.overflow='hidden';
+  }
+}
+function closeMenu(){
+  var ham = document.getElementById('hamburger');
+  var mob = document.getElementById('mobileMenu');
+  if(!ham || !mob) return;
+  ham.classList.remove('open');
+  mob.classList.remove('open');
+  ham.setAttribute('aria-expanded','false');
+  document.body.style.overflow='';
+}
+</script>
 <style>
 /* ── TOKENS ── */
 :root{
@@ -30,7 +59,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 }
 
 /* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 var(--px);z-index:200;backdrop-filter:blur(20px);background:rgba(10,10,15,.8);border-bottom:1px solid var(--border)}
+nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 var(--px);z-index:9000;backdrop-filter:blur(20px);background:rgba(10,10,15,.8);border-bottom:1px solid var(--border)}
 .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(.7rem,2.2vw,1rem);background:var(--accent-g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;letter-spacing:.01em}
 .nav-links{display:flex;gap:2rem;list-style:none}
 .nav-links a{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
@@ -39,7 +68,7 @@ nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);display:flex;align-i
 .nav-badge{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.35rem .9rem;border-radius:100px;background:linear-gradient(90deg,rgba(124,58,237,.25),rgba(6,182,212,.25));border:1px solid var(--border);color:var(--accent2)}
 
 /* ── HAMBURGER ── */
-.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:44px;height:44px;background:none;border:none;cursor:pointer;z-index:300;padding:4px;-webkit-tap-highlight-color:transparent}
+.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:44px;height:44px;background:none;border:none;cursor:pointer;z-index:9999;padding:4px;-webkit-tap-highlight-color:transparent;position:relative}
 .hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:transform .3s,opacity .3s,width .3s;pointer-events:none}
 .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .hamburger.open span:nth-child(2){opacity:0;width:0}
@@ -49,7 +78,7 @@ nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);display:flex;align-i
 .mobile-menu{
   position:fixed;inset:0;
   background:rgba(8,8,14,.97);
-  z-index:250;
+  z-index:9500;
   display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2.5rem;
   backdrop-filter:blur(28px);
   opacity:0;visibility:hidden;pointer-events:none;
@@ -97,11 +126,11 @@ h2.section-title span{background:var(--accent-g);-webkit-background-clip:text;-w
 
 /* Buttons */
 .hero-buttons{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:1rem;margin-bottom:2.5rem;position:relative;z-index:1;animation:fadeUp .6s ease .6s both}
-.btn-primary{background:var(--accent-g);padding:.9rem 2.2rem;border-radius:10px;text-decoration:none;color:#fff;font-weight:700;font-size:.88rem;letter-spacing:.02em;transition:opacity .25s,transform .25s,box-shadow .25s;min-width:170px;text-align:center;position:relative;overflow:hidden}
+.btn-primary{background:var(--accent-g);padding:.9rem 2.2rem;border-radius:10px;text-decoration:none;color:#fff;font-weight:700;font-size:.88rem;letter-spacing:.02em;transition:opacity .25s,transform .25s,box-shadow .25s;text-align:center;position:relative;overflow:hidden}
 .btn-primary::after{content:'';position:absolute;top:0;left:-75%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);animation:shimmer 3s ease-in-out 2s infinite}
 @keyframes shimmer{0%{left:-75%}100%{left:125%}}
 .btn-primary:hover{opacity:.88;transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.45)}
-.btn-secondary{border:1px solid rgba(124,58,237,.4);padding:.9rem 2.2rem;border-radius:10px;text-decoration:none;color:var(--text);font-size:.88rem;letter-spacing:.02em;transition:border-color .25s,transform .25s,background .25s;min-width:170px;text-align:center;background:rgba(124,58,237,.06)}
+.btn-secondary{border:1px solid rgba(124,58,237,.4);padding:.9rem 2.2rem;border-radius:10px;text-decoration:none;color:var(--text);font-size:.88rem;letter-spacing:.02em;transition:border-color .25s,transform .25s,background .25s;text-align:center;background:rgba(124,58,237,.06)}
 .btn-secondary:hover{border-color:var(--accent2);background:rgba(6,182,212,.07);transform:translateY(-2px)}
 
 /* Hero meta */
@@ -235,8 +264,8 @@ footer{padding:1.5rem var(--px);border-top:1px solid var(--border);display:flex;
 
   .hero-sub{font-size:.8rem;min-height:auto;margin-bottom:1.5rem;padding:0 .2rem}
 
-  .hero-buttons{flex-direction:column;align-items:center;gap:.75rem;margin-bottom:1.8rem}
-  .btn-primary,.btn-secondary{width:100%;max-width:300px;min-width:unset;padding:.9rem 1rem;font-size:.85rem}
+  .hero-buttons{flex-direction:row;align-items:center;justify-content:center;gap:.6rem;margin-bottom:1.8rem;flex-wrap:nowrap;width:100%;padding:0 .2rem}
+  .btn-primary,.btn-secondary{flex:1;min-width:0;max-width:none;padding:.85rem .4rem;font-size:.75rem;letter-spacing:.01em;white-space:nowrap;text-align:center}
 
   .hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;width:100%}
   .hero-meta a,.hero-meta-location{justify-content:center;font-size:.62rem;padding:.5rem .3rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;gap:.3rem}
@@ -290,16 +319,6 @@ footer{padding:1.5rem var(--px);border-top:1px solid var(--border);display:flex;
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#about">À propos</a>
-  <a href="#experience">Expériences</a>
-  <a href="#projects">Projets</a>
-  <a href="#education">Formation</a>
-  <a href="#contact">Contact</a>
-  <div class="mob-badge">● Disponible</div>
-</div>
-
 <!-- NAV -->
 <nav>
   <div class="logo">Dèlidji GBAGUIDI</div>
@@ -312,11 +331,21 @@ footer{padding:1.5rem var(--px);border-top:1px solid var(--border);display:flex;
   </ul>
   <div class="nav-right">
     <div class="nav-badge">● Disponible</div>
-    <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu" aria-expanded="false">
+    <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" onclick="toggleMenu()">
       <span></span><span></span><span></span>
     </button>
   </div>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMenu()">À propos</a>
+  <a href="#experience" onclick="closeMenu()">Expériences</a>
+  <a href="#projects" onclick="closeMenu()">Projets</a>
+  <a href="#education" onclick="closeMenu()">Formation</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <div class="mob-badge">● Disponible</div>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -549,39 +578,8 @@ footer{padding:1.5rem var(--px);border-top:1px solid var(--border);display:flex;
 (function(){
 'use strict';
 
-/* ── HAMBURGER — inline, pas de dépendance externe ── */
-var ham = document.getElementById('hamburger');
-var mob = document.getElementById('mobileMenu');
-
-function openMenu(){
-  ham.classList.add('open');
-  mob.classList.add('open');
-  ham.setAttribute('aria-expanded','true');
-  document.body.style.overflow='hidden';
-}
-function closeMenu(){
-  ham.classList.remove('open');
-  mob.classList.remove('open');
-  ham.setAttribute('aria-expanded','false');
-  document.body.style.overflow='';
-}
-
-ham.addEventListener('click', function(){
-  ham.classList.contains('open') ? closeMenu() : openMenu();
-});
-// Fermer en cliquant les liens du menu
-mob.querySelectorAll('a').forEach(function(a){
-  a.addEventListener('click', closeMenu);
-});
-// Fermer en cliquant le fond
-mob.addEventListener('click', function(e){
-  if(e.target === mob) closeMenu();
-});
-document.addEventListener('keydown', function(e){
-  if(e.key==='Escape') closeMenu();
-});
-
 /* ── JS-READY (scroll reveal) ── */
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu();});
 document.documentElement.classList.add('js-ready');
 
 var io = new IntersectionObserver(function(entries){
@@ -645,16 +643,4 @@ if(canvas){
 }
 
 /* ── TYPEWRITER ── */
-var typed=document.getElementById('heroTyped');
-if(typed){
-  var txt='Ingénieur logiciel Java, Spring Batch et DevOps. Passionné par l\'automatisation de batchs critiques et la fiabilisation des livraisons CI/CD.';
-  var i=0;
-  setTimeout(function type(){
-    if(i<=txt.length){typed.textContent=txt.slice(0,i++);setTimeout(type,28);}
-  },600);
-}
-
-})();
-</script>
-</body>
-</html>
+var 
