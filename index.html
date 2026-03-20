@@ -1,392 +1,660 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Dèlidji GBAGUIDI — Ingénieur logiciel Java, Spring Batch et DevOps. CDI chez 74 Software SBS, Rodez." />
-  <title>Dèlidji GBAGUIDI — Ingénieur Logiciel</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Dèlidji GBAGUIDI — Ingénieur logiciel Java, Spring Batch et DevOps."/>
+<title>Dèlidji GBAGUIDI — Ingénieur Logiciel</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+/* ── TOKENS ── */
+:root{
+  --bg:#0a0a0f;--card:#111118;--card2:#16161f;
+  --accent:#7c3aed;--accent2:#06b6d4;
+  --accent-g:linear-gradient(90deg,#7c3aed,#06b6d4);
+  --text:#f1f5f9;--muted:#94a3b8;
+  --border:rgba(124,58,237,.18);
+  --nav-h:68px;--px:clamp(1rem,5vw,3rem);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);background-image:radial-gradient(ellipse 100% 60% at 50% 0%,#1a1040 0%,transparent 60%),radial-gradient(circle at top right,#0d1a2e 0%,transparent 50%);color:var(--text);overflow-x:hidden;min-height:100vh}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.5}
+@media(pointer:fine){body{cursor:none}}
+
+/* ── CURSOR ── */
+.cursor,.cursor-ring{display:none}
+@media(pointer:fine){
+  .cursor{display:block;position:fixed;top:0;left:0;width:10px;height:10px;border-radius:50%;background:var(--accent2);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen}
+  .cursor-ring{display:block;position:fixed;top:0;left:0;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5}
+}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 var(--px);z-index:200;backdrop-filter:blur(20px);background:rgba(10,10,15,.8);border-bottom:1px solid var(--border)}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(.7rem,2.2vw,1rem);background:var(--accent-g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;letter-spacing:.01em}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-right{display:flex;align-items:center;gap:1rem}
+.nav-badge{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.35rem .9rem;border-radius:100px;background:linear-gradient(90deg,rgba(124,58,237,.25),rgba(6,182,212,.25));border:1px solid var(--border);color:var(--accent2)}
+
+/* ── HAMBURGER ── */
+.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:44px;height:44px;background:none;border:none;cursor:pointer;z-index:300;padding:4px;-webkit-tap-highlight-color:transparent}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:transform .3s,opacity .3s,width .3s;pointer-events:none}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;width:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ── MOBILE MENU ── */
+.mobile-menu{
+  position:fixed;inset:0;
+  background:rgba(8,8,14,.97);
+  z-index:250;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2.5rem;
+  backdrop-filter:blur(28px);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .35s ease,visibility .35s ease;
+}
+.mobile-menu.open{opacity:1;visibility:visible;pointer-events:all}
+.mobile-menu a{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(2rem,9vw,3.2rem);color:var(--text);text-decoration:none;letter-spacing:-.02em;transition:color .2s}
+.mobile-menu a:hover,.mobile-menu a:active{color:var(--accent2)}
+.mob-badge{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.55rem 1.4rem;border-radius:100px;background:linear-gradient(90deg,rgba(124,58,237,.3),rgba(6,182,212,.3));border:1px solid var(--border);color:var(--accent2)}
+
+@media(max-width:860px){
+  .nav-links,.nav-badge{display:none}
+  .hamburger{display:flex}
+}
+
+/* ── SECTIONS ── */
+section{padding:clamp(4rem,9vw,7rem) var(--px);position:relative;z-index:1}
+.section-tag{display:inline-flex;align-items:center;gap:.6rem;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent2);margin-bottom:1.2rem}
+.section-tag::before{content:'';width:1.5rem;height:1px;background:var(--accent2);display:block}
+h2.section-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.2rem);letter-spacing:-.03em;line-height:1.05;margin-bottom:clamp(2.5rem,5vw,4rem)}
+h2.section-title span{background:var(--accent-g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tag{font-size:.57rem;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .5rem;border-radius:5px;background:rgba(124,58,237,.12);color:rgba(241,245,249,.6)}
+
+/* ── HERO ── */
+#hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:calc(var(--nav-h) + 2rem) var(--px) 3rem;position:relative;overflow:hidden;gap:0}
+#heroCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.hero-eyebrow{display:flex;align-items:center;gap:.8rem;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent2);margin-bottom:1.6rem;position:relative;z-index:1;animation:fadeUp .6s ease .2s both}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80;animation:pulseDot 2s infinite;flex-shrink:0}
+@keyframes pulseDot{0%,100%{box-shadow:0 0 4px #4ade80}50%{box-shadow:0 0 14px #4ade80,0 0 24px rgba(74,222,128,.3)}}
+
+/* Ticker */
+.hero-ticker{width:100vw;margin-left:calc(-1 * var(--px));overflow:hidden;position:relative;z-index:1;margin-bottom:1.8rem;border-top:1px solid rgba(124,58,237,.2);border-bottom:1px solid rgba(124,58,237,.2);padding:.9rem 0;-webkit-mask-image:linear-gradient(90deg,transparent 0%,black 8%,black 92%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0%,black 8%,black 92%,transparent 100%);animation:fadeUp .6s ease .3s both}
+.hero-ticker__track{display:inline-flex;align-items:center;gap:2rem;white-space:nowrap;animation:tickerScroll 20s linear infinite}
+@media(pointer:fine){.hero-ticker:hover .hero-ticker__track{animation-play-state:paused}}
+@keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.hero-ticker__item{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.4rem,3.5vw,2.8rem);letter-spacing:-.03em;color:var(--text);white-space:nowrap}
+.hero-ticker__item em{font-style:normal;background:linear-gradient(90deg,#7c3aed,#06b6d4,#a855f7,#06b6d4,#7c3aed);background-size:300% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradShift 4s linear infinite}
+@keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.hero-ticker__sep{font-size:1.2rem;color:var(--accent2);opacity:.6;flex-shrink:0}
+
+/* Hero sub */
+.hero-sub{font-size:clamp(.88rem,2vw,1.05rem);color:var(--muted);max-width:560px;line-height:1.75;margin-bottom:2rem;position:relative;z-index:1;min-height:2.5em;animation:fadeUp .6s ease .4s both}
+.hero-caret{display:inline-block;color:var(--accent2);animation:caretBlink .85s step-end infinite}
+@keyframes caretBlink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* Buttons */
+.hero-buttons{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:1rem;margin-bottom:2.5rem;position:relative;z-index:1;animation:fadeUp .6s ease .6s both}
+.btn-primary{background:var(--accent-g);padding:.9rem 2.2rem;border-radius:10px;text-decoration:none;color:#fff;font-weight:700;font-size:.88rem;letter-spacing:.02em;transition:opacity .25s,transform .25s,box-shadow .25s;min-width:170px;text-align:center;position:relative;overflow:hidden}
+.btn-primary::after{content:'';position:absolute;top:0;left:-75%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);animation:shimmer 3s ease-in-out 2s infinite}
+@keyframes shimmer{0%{left:-75%}100%{left:125%}}
+.btn-primary:hover{opacity:.88;transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.45)}
+.btn-secondary{border:1px solid rgba(124,58,237,.4);padding:.9rem 2.2rem;border-radius:10px;text-decoration:none;color:var(--text);font-size:.88rem;letter-spacing:.02em;transition:border-color .25s,transform .25s,background .25s;min-width:170px;text-align:center;background:rgba(124,58,237,.06)}
+.btn-secondary:hover{border-color:var(--accent2);background:rgba(6,182,212,.07);transform:translateY(-2px)}
+
+/* Hero meta */
+.hero-meta{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;position:relative;z-index:1;animation:fadeUp .6s ease .8s both}
+.hero-meta a,.hero-meta-location{display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.hero-meta a:hover{color:var(--accent2)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── ABOUT ── */
+#about{background:none}
+.about-wrapper{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:start}
+.about-text p{font-size:clamp(.83rem,1.5vw,.95rem);line-height:1.9;color:rgba(241,245,249,.7);margin-bottom:1.1rem;text-align:justify;hyphens:auto}
+.about-text p strong{color:var(--text);font-weight:600}
+.langs-block{margin-top:2rem}
+.lang-row{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;padding:.9rem 0;border-bottom:1px solid var(--border)}
+.lang-name{font-weight:600;font-size:.85rem}
+.lang-right{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+.pill{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;padding:.28rem .75rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)}
+.pill.accent{border-color:var(--accent2);color:var(--accent2)}
+.lang-score{font-size:.65rem;color:var(--accent)}
+.skills-list{display:flex;flex-direction:column;gap:.65rem;list-style:none}
+.skill-row{display:flex;align-items:center;gap:.9rem;padding:.9rem 1.1rem;border-radius:10px;background:var(--card);border:1px solid var(--border);transition:border-color .3s,transform .2s;cursor:default}
+@media(pointer:fine){.skill-row:hover{border-color:rgba(124,58,237,.5);transform:translateX(5px)}}
+.skill-icon{font-size:1rem;width:1.8rem;text-align:center;flex-shrink:0}
+.skill-name{font-size:.78rem;font-weight:600;flex:1;min-width:70px}
+.tags{display:flex;flex-wrap:wrap;gap:.3rem}
+
+/* ── TIMELINE ── */
+#experience{background:none}
+.timeline{position:relative;list-style:none}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent),var(--accent2),transparent)}
+.t-item{padding:0 0 3rem 2.4rem;position:relative;transition:opacity .5s,transform .5s}
+.t-item::before{content:'';position:absolute;left:-4.5px;top:7px;width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 0 14px rgba(124,58,237,.6)}
+.t-date{display:block;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:.4rem}
+.t-company{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.05rem,2.5vw,1.35rem);letter-spacing:-.02em;margin-bottom:.2rem}
+.t-role{font-size:.75rem;color:var(--muted);margin-bottom:.75rem}
+.t-badge{display:inline-flex;align-items:center;gap:.35rem;margin-bottom:.9rem;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;padding:.27rem .65rem;border-radius:5px;font-weight:600}
+.b-current{background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.3)}
+.b-stage{background:rgba(124,58,237,.1);color:#a78bfa;border:1px solid rgba(124,58,237,.3)}
+.b-collab{background:rgba(6,182,212,.1);color:var(--accent2);border:1px solid rgba(6,182,212,.3)}
+.t-desc{list-style:none;display:flex;flex-direction:column;gap:.38rem}
+.t-desc li{font-size:clamp(.73rem,1.4vw,.82rem);line-height:1.75;color:rgba(241,245,249,.6);text-align:justify;hyphens:auto}
+.t-desc li::before{content:'▸ ';color:var(--accent2)}
+
+/* ── EDUCATION ── */
+#education{background:none}
+.edu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:1.2rem}
+.edu-card{padding:clamp(1.2rem,3vw,2rem);border-radius:16px;background:var(--card);border:1px solid var(--border);position:relative;overflow:hidden;transition:border-color .3s,box-shadow .3s}
+.edu-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent-g);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+@media(pointer:fine){.edu-card:hover{border-color:rgba(124,58,237,.4);box-shadow:0 10px 40px rgba(124,58,237,.15)}.edu-card:hover::before{transform:scaleX(1)}}
+.edu-year{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem}
+.edu-school{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(1rem,2.5vw,1.15rem);margin-bottom:.3rem}
+.edu-degree{font-size:.76rem;color:var(--accent2);margin-bottom:.9rem}
+.edu-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+
+/* ── PROJECTS ── */
+#projects{background:none}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:1.5rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:clamp(1.4rem,3vw,2rem);transition:border-color .3s,box-shadow .3s;cursor:default;position:relative;overflow:hidden}
+.card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(124,58,237,.07),transparent 60%);opacity:0;transition:opacity .4s}
+@media(pointer:fine){.card:hover::after{opacity:1}.card:hover{border-color:rgba(124,58,237,.45);box-shadow:0 20px 50px rgba(124,58,237,.2)}}
+.card-icon{font-size:1.8rem;margin-bottom:1rem}
+.card h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:.6rem}
+.card p{font-size:.8rem;line-height:1.75;color:var(--muted);text-align:justify;hyphens:auto}
+.card-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
+
+/* ── SOFTSKILLS ── */
+#softskills{background:none}
+.soft-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,45%),1fr));gap:1px;border:1px solid var(--border);border-radius:14px;overflow:hidden;list-style:none}
+.soft-item{padding:clamp(1.2rem,3vw,1.8rem) clamp(.9rem,2vw,1.4rem);background:var(--card);display:flex;flex-direction:column;gap:.55rem;transition:background .3s}
+@media(pointer:fine){.soft-item:hover{background:var(--card2)}}
+.soft-emoji{font-size:1.5rem}
+.soft-name{font-weight:600;font-size:.82rem}
+
+/* ── INTERESTS ── */
+#interests{background:none}
+.interests-wrap{display:flex;flex-wrap:wrap;gap:.8rem;list-style:none}
+.interest-pill{display:flex;align-items:center;gap:.65rem;padding:.8rem 1.3rem;border-radius:100px;border:1px solid var(--border);font-size:clamp(.7rem,1.5vw,.82rem);font-weight:500;transition:all .3s;cursor:default}
+@media(pointer:fine){.interest-pill:hover{border-color:var(--accent);background:rgba(124,58,237,.08);transform:scale(1.04)}}
+.interest-pill .pi{font-size:1.1rem;flex-shrink:0}
+
+/* ── CONTACT ── */
+#contact{background:none}
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2.5rem,6vw,5rem);align-items:center}
+.contact-left p{font-size:.85rem;line-height:1.85;color:var(--muted);margin-bottom:2rem;text-align:justify;hyphens:auto}
+.contact-links{display:flex;flex-direction:column;gap:.75rem;font-style:normal}
+.contact-link{display:flex;align-items:center;gap:.9rem;padding:.9rem 1.1rem;border-radius:10px;border:1px solid var(--border);text-decoration:none;color:var(--text);font-size:.78rem;transition:all .25s}
+.contact-link--static{cursor:default}
+@media(pointer:fine){.contact-link:not(.contact-link--static):hover{border-color:var(--accent2);color:var(--accent2);transform:translateX(5px)}}
+.cl-icon{font-size:1rem;width:1.4rem;text-align:center;flex-shrink:0}
+.contact-right{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:clamp(1.8rem,4vw,3rem);text-align:center;position:relative;overflow:hidden}
+.contact-right::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 80%,rgba(124,58,237,.12),transparent 70%)}
+.big-init{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(5rem,14vw,10rem);line-height:1;letter-spacing:-.05em;background:var(--accent-g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-bottom:.5rem;position:relative;z-index:1}
+.cr-label{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--accent2);margin-bottom:1rem;position:relative;z-index:1}
+.cr-sub{font-size:.72rem;color:var(--muted);line-height:1.9;position:relative;z-index:1}
+
+/* ── FOOTER ── */
+footer{padding:1.5rem var(--px);border-top:1px solid var(--border);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.5rem;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);position:relative;z-index:1}
+
+/* ── SCROLL REVEAL ── */
+.fade-up{opacity:1;transform:translateY(0);transition:opacity .6s ease,transform .6s ease}
+.js-ready .fade-up{opacity:0;transform:translateY(28px)}
+.js-ready .fade-up.visible{opacity:1;transform:translateY(0)}
+.js-ready .t-item{opacity:0;transform:translateX(-18px)}
+.js-ready .t-item.visible{opacity:1;transform:translateX(0)}
+.js-ready .edu-card{opacity:0;transform:translateY(18px)}
+.js-ready .edu-card.visible{opacity:1;transform:translateY(0)}
+.fade-up--delay{transition-delay:.12s}
+.fade-up--d1{transition-delay:.1s}
+.fade-up--d2{transition-delay:.2s}
+
+/* ── RESPONSIVE TABLET ≤900px ── */
+@media(max-width:900px){
+  .about-wrapper{grid-template-columns:1fr;gap:2.5rem}
+  .contact-wrap{grid-template-columns:1fr}
+  .contact-right{display:none}
+}
+
+/* ── RESPONSIVE MOBILE ≤600px ── */
+@media(max-width:600px){
+  :root{--nav-h:56px;--px:1.2rem}
+  section{padding:3rem var(--px)}
+
+  #hero{padding:calc(var(--nav-h) + 1.5rem) var(--px) 2.5rem;justify-content:center}
+
+  .hero-eyebrow{font-size:.58rem;letter-spacing:.14em;margin-bottom:1rem;justify-content:center;flex-wrap:wrap}
+
+  .hero-ticker{margin-left:calc(-1 * var(--px));padding:.65rem 0;margin-bottom:1.2rem}
+  .hero-ticker__item{font-size:clamp(1.2rem,6vw,1.7rem)}
+
+  .hero-sub{font-size:.8rem;min-height:auto;margin-bottom:1.5rem;padding:0 .2rem}
+
+  .hero-buttons{flex-direction:column;align-items:center;gap:.75rem;margin-bottom:1.8rem}
+  .btn-primary,.btn-secondary{width:100%;max-width:300px;min-width:unset;padding:.9rem 1rem;font-size:.85rem}
+
+  .hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;width:100%}
+  .hero-meta a,.hero-meta-location{justify-content:center;font-size:.62rem;padding:.5rem .3rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;gap:.3rem}
+
+  h2.section-title{font-size:clamp(1.6rem,7vw,2.2rem);margin-bottom:1.5rem}
+
+  .skill-row{flex-wrap:wrap;padding:.75rem .9rem}
+  .skill-name{width:100%;min-width:unset}
+  .tags{width:100%}
+  .lang-row{flex-direction:column;align-items:flex-start;gap:.35rem}
+
+  .t-item{padding-left:1.8rem;padding-bottom:2rem}
+  .t-company{font-size:1rem}
+  .t-role{font-size:.7rem}
+  .t-desc li{font-size:.74rem}
+
+  .cards-grid{grid-template-columns:1fr;gap:1rem}
+  .card{padding:1.2rem}
+  .card h3{font-size:.9rem}
+  .card p{font-size:.76rem}
+
+  .edu-grid{grid-template-columns:1fr}
+
+  .soft-grid{grid-template-columns:repeat(2,1fr)}
+  .soft-item{padding:1rem}
+  .soft-emoji{font-size:1.3rem}
+  .soft-name{font-size:.75rem}
+
+  .interests-wrap{gap:.5rem}
+  .interest-pill{padding:.6rem .9rem;font-size:.67rem}
+
+  .contact-link{font-size:.75rem;padding:.8rem .9rem}
+  .contact-left p{font-size:.8rem}
+
+  footer{flex-direction:column;text-align:center;gap:.3rem}
+  footer span:nth-child(2){display:none}
+}
+
+/* ── RESPONSIVE S.MOBILE ≤380px ── */
+@media(max-width:380px){
+  :root{--px:1rem}
+  .hero-ticker__item{font-size:clamp(1.05rem,7vw,1.4rem)}
+  .hero-meta{grid-template-columns:1fr 1fr}
+  .hero-meta a,.hero-meta-location{font-size:.56rem}
+  .t-item{padding-left:1.5rem}
+}
+</style>
 </head>
 <body>
 
-  <!-- ── Custom Cursor ── -->
-  <div class="cursor" id="cursor" aria-hidden="true"></div>
-  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-  <!-- ── Mobile Overlay Menu ── -->
-  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Navigation mobile">
-    <a href="#about"      onclick="closeMenu()">À propos</a>
-    <a href="#experience" onclick="closeMenu()">Expériences</a>
-    <a href="#projects"   onclick="closeMenu()">Projets</a>
-    <a href="#education"  onclick="closeMenu()">Formation</a>
-    <a href="#contact"    onclick="closeMenu()">Contact</a>
-    <div class="mob-badge" aria-label="Statut : disponible">● Disponible</div>
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about">À propos</a>
+  <a href="#experience">Expériences</a>
+  <a href="#projects">Projets</a>
+  <a href="#education">Formation</a>
+  <a href="#contact">Contact</a>
+  <div class="mob-badge">● Disponible</div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Dèlidji GBAGUIDI</div>
+  <ul class="nav-links">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#experience">Expériences</a></li>
+    <li><a href="#projects">Projets</a></li>
+    <li><a href="#education">Formation</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-badge">● Disponible</div>
+    <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+
+  <div class="hero-eyebrow">
+    <div class="status-dot" aria-hidden="true"></div>
+    CDI · 74 Software SBS · Rodez
   </div>
 
-  <!-- ══════════════════════════════
-       NAV
-  ══════════════════════════════ -->
-  <nav role="navigation" aria-label="Navigation principale">
-    <div class="logo" aria-label="Dèlidji Gbaguidi">Dèlidji GBAGUIDI</div>
-
-    <ul class="nav-links">
-      <li><a href="#about">À propos</a></li>
-      <li><a href="#experience">Expériences</a></li>
-      <li><a href="#projects">Projets</a></li>
-      <li><a href="#education">Formation</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-
-    <div class="nav-right">
-      <div class="nav-badge" aria-label="Statut : disponible">● Disponible</div>
-      <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+  <div class="hero-ticker" aria-label="Je construis des systèmes robustes et scalables">
+    <div class="hero-ticker__track">
+      <span class="hero-ticker__item">Je construis des systèmes <em>robustes</em> et <em>scalables</em></span>
+      <span class="hero-ticker__sep" aria-hidden="true">✦</span>
+      <span class="hero-ticker__item">Je construis des systèmes <em>robustes</em> et <em>scalables</em></span>
+      <span class="hero-ticker__sep" aria-hidden="true">✦</span>
+      <span class="hero-ticker__item">Je construis des systèmes <em>robustes</em> et <em>scalables</em></span>
+      <span class="hero-ticker__sep" aria-hidden="true">✦</span>
+      <span class="hero-ticker__item">Je construis des systèmes <em>robustes</em> et <em>scalables</em></span>
+      <span class="hero-ticker__sep" aria-hidden="true">✦</span>
     </div>
-  </nav>
+  </div>
 
-  <!-- ══════════════════════════════
-       HERO
-  ══════════════════════════════ -->
-  <section id="hero" aria-label="Introduction">
+  <p class="hero-sub">
+    <span id="heroTyped"></span>
+    <span class="hero-caret" aria-hidden="true">|</span>
+  </p>
 
-    <!-- Particle canvas (JS-driven) -->
-    <canvas id="heroCanvas" aria-hidden="true"></canvas>
+  <div class="hero-buttons">
+    <a href="#contact" class="btn-primary">Me contacter</a>
+    <a href="#experience" class="btn-secondary">Voir mon parcours</a>
+  </div>
 
-    <!-- Eyebrow status -->
-    <div class="hero-eyebrow">
-      <div class="status-dot" aria-hidden="true"></div>
-      CDI · 74 Software SBS · Rodez
-    </div>
+  <div class="hero-meta">
+    <a href="tel:0033784201781">📞 +33 7 84 20 17 81</a>
+    <a href="mailto:aurelgbaguidi@yahoo.com">✉ aurelgbaguidi@yahoo.com</a>
+    <a href="https://www.linkedin.com/in/delidji-gbaguidi/" target="_blank" rel="noopener noreferrer">🔗 LinkedIn</a>
+    <span class="hero-meta-location">📍 Rodez, France</span>
+  </div>
+</section>
 
-    <!-- Ticker: texte défilant droite → gauche en boucle -->
-    <div class="hero-ticker" aria-label="Je construis des systèmes robustes et scalables">
-      <div class="hero-ticker__track">
-        <span class="hero-ticker__item">Je construis des systèmes <em>robustes</em> et <em>scalables</em></span>
-        <span class="hero-ticker__sep" aria-hidden="true">✦</span>
-        <span class="hero-ticker__item">Je construis des systèmes <em>robustes</em> et <em>scalables</em></span>
-        <span class="hero-ticker__sep" aria-hidden="true">✦</span>
-        <span class="hero-ticker__item">Je construis des systèmes <em>robustes</em> et <em>scalables</em></span>
-        <span class="hero-ticker__sep" aria-hidden="true">✦</span>
-        <span class="hero-ticker__item">Je construis des systèmes <em>robustes</em> et <em>scalables</em></span>
-        <span class="hero-ticker__sep" aria-hidden="true">✦</span>
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-wrapper">
+    <div class="fade-up">
+      <p class="section-tag">001 — Profil</p>
+      <h2 class="section-title">Qui <span>suis-je</span> ?</h2>
+      <div class="about-text">
+        <p><strong>Ingénieur logiciel Java (Jakarta EE) et Spring Batch</strong>, diplômé de l'EFREI Paris, avec un fort intérêt pour le traitement de données à grande échelle et l'automatisation de batchs complexes.</p>
+        <p>Je contribue activement à la mise en place de pipelines CI/CD afin de garantir performance et fiabilité des systèmes. Mon parcours franco-béninois m'a forgé une capacité d'adaptation unique et une vision globale des projets techniques.</p>
+        <p>Au-delà du code, je suis animé par la rigueur, l'amélioration continue et la transmission — des valeurs que j'applique aussi bien dans mes projets professionnels que dans ma vie personnelle.</p>
       </div>
-    </div>
-
-    <!-- Animated subtitle (typewriter) -->
-    <p class="hero-sub">
-      <span id="heroTyped" aria-label="Ingénieur logiciel spécialisé en Java, Spring Batch et DevOps. Passionné par l'automatisation de batchs critiques et la fiabilisation des livraisons CI/CD."></span>
-      <span class="hero-caret" aria-hidden="true">|</span>
-    </p>
-
-    <div class="hero-buttons">
-      <a href="#contact" class="btn-primary">Me contacter</a>
-      <a href="#experience" class="btn-secondary">Voir mon parcours</a>
-    </div>
-
-    <div class="hero-meta" aria-label="Coordonnées">
-      <a href="tel:0033784201781">📞 +33 7 84 20 17 81</a>
-      <a href="mailto:aurelgbaguidi@yahoo.com">✉ aurelgbaguidi@yahoo.com</a>
-      <a href="https://www.linkedin.com/in/delidji-gbaguidi/" target="_blank" rel="noopener noreferrer">🔗 LinkedIn</a>
-      <span class="hero-meta-location">📍 Rodez, France</span>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════
-       ABOUT
-  ══════════════════════════════ -->
-  <section id="about" aria-label="Profil">
-    <div class="about-wrapper">
-
-      <!-- Bio + Langues -->
-      <div class="fade-up">
-        <p class="section-tag">001 — Profil</p>
-        <h2 class="section-title">Qui <span>suis-je</span> ?</h2>
-
-        <div class="about-text">
-          <p>
-            <strong>Ingénieur logiciel Java (Jakarta EE) et Spring Batch</strong>, diplômé de l'EFREI Paris,
-            avec un fort intérêt pour le traitement de données à grande échelle et l'automatisation de batchs complexes.
-          </p>
-          <p>
-            Je contribue activement à la mise en place de pipelines CI/CD afin de garantir performance
-            et fiabilité des systèmes. Mon parcours franco-béninois m'a forgé une capacité d'adaptation
-            unique et une vision globale des projets techniques.
-          </p>
-          <p>
-            Au-delà du code, je suis animé par la rigueur, l'amélioration continue et la transmission —
-            des valeurs que j'applique aussi bien dans mes projets professionnels que dans ma vie personnelle.
-          </p>
+      <div class="langs-block">
+        <p class="section-tag">Langues</p>
+        <div class="lang-row">
+          <span class="lang-name">Français</span>
+          <div class="lang-right"><span class="pill accent">Langue maternelle</span></div>
         </div>
-
-        <div class="langs-block">
-          <p class="section-tag">Langues</p>
-          <div class="lang-row">
-            <span class="lang-name">Français</span>
-            <div class="lang-right">
-              <span class="pill accent">Langue maternelle</span>
-            </div>
-          </div>
-          <div class="lang-row">
-            <span class="lang-name">Anglais</span>
-            <div class="lang-right">
-              <span class="lang-score">TOEIC 925 pts · 2024</span>
-              <span class="pill">Niveau B2</span>
-            </div>
+        <div class="lang-row">
+          <span class="lang-name">Anglais</span>
+          <div class="lang-right">
+            <span class="lang-score">TOEIC 925 pts · 2024</span>
+            <span class="pill">Niveau B2</span>
           </div>
         </div>
       </div>
-
-      <!-- Stack technique -->
-      <div class="fade-up fade-up--delay">
-        <p class="section-tag">Stack technique</p>
-        <ul class="skills-list" aria-label="Compétences techniques">
-          <li class="skill-row">
-            <span class="skill-icon" aria-hidden="true">⚙️</span>
-            <span class="skill-name">Programmation</span>
-            <div class="tags">
-              <span class="tag">Java</span><span class="tag">C</span><span class="tag">C++</span>
-              <span class="tag">Bash</span><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span>
-            </div>
-          </li>
-          <li class="skill-row">
-            <span class="skill-icon" aria-hidden="true">🛠</span>
-            <span class="skill-name">DevOps</span>
-            <div class="tags">
-              <span class="tag">Jenkins</span><span class="tag">Ansible</span>
-              <span class="tag">Docker</span><span class="tag">Git</span><span class="tag">SSH</span>
-            </div>
-          </li>
-          <li class="skill-row">
-            <span class="skill-icon" aria-hidden="true">🖥</span>
-            <span class="skill-name">Systèmes</span>
-            <div class="tags">
-              <span class="tag">Linux</span><span class="tag">Windows</span><span class="tag">MacOS</span>
-            </div>
-          </li>
-          <li class="skill-row">
-            <span class="skill-icon" aria-hidden="true">🏗</span>
-            <span class="skill-name">Architecture</span>
-            <div class="tags">
-              <span class="tag">Spring Batch</span><span class="tag">Jakarta EE</span>
-              <span class="tag">CI/CD</span><span class="tag">Cloud</span>
-            </div>
-          </li>
-          <li class="skill-row">
-            <span class="skill-icon" aria-hidden="true">🔒</span>
-            <span class="skill-name">Qualité</span>
-            <div class="tags">
-              <span class="tag">Secure Coding</span><span class="tag">Tests</span><span class="tag">Big Data</span>
-            </div>
-          </li>
-        </ul>
-      </div>
-
     </div>
-  </section>
-
-  <!-- ══════════════════════════════
-       EXPERIENCE
-  ══════════════════════════════ -->
-  <section id="experience" aria-label="Expériences professionnelles">
-    <p class="section-tag">002 — Expériences</p>
-    <h2 class="section-title">Parcours <span>professionnel</span></h2>
-
-    <ol class="timeline" aria-label="Historique des postes">
-
-      <li class="t-item">
-        <time class="t-date" datetime="2025-01">Janvier 2025 — Présent</time>
-        <h3 class="t-company">74 Software SBS</h3>
-        <p class="t-role">CDI · Développeur Java · Rodez, France</p>
-        <span class="t-badge b-current">● Poste actuel</span>
-        <ul class="t-desc">
-          <li>Développement et optimisation de traitements batch critiques pour la gestion de flux financiers (encours, devises, opérations SI)</li>
-          <li>Implémentation de règles métier complexes garantissant cohérence et qualité des données</li>
-          <li>Conception de jobs Spring Batch modulaires, maintenables et scalables</li>
-          <li>Analyse et correction des anomalies : rejets, valeurs manquantes, incohérences de données</li>
-          <li>Participation active aux pipelines CI/CD : validation, tests, intégration et fiabilisation des déploiements</li>
-          <li>Optimisation continue des performances et de la stabilité des systèmes</li>
-          <li>Gestion Git : merge requests, résolution de conflits, structuration des branches</li>
-          <li>Collaboration transverse avec équipes techniques et fonctionnelles</li>
-        </ul>
-      </li>
-
-      <li class="t-item">
-        <time class="t-date" datetime="2024-03">Mars 2024 — Septembre 2024</time>
-        <h3 class="t-company">Sopra Stéria</h3>
-        <p class="t-role">Stage de fin d'études · DevOps · Paris, France</p>
-        <span class="t-badge b-stage">Stage</span>
-        <ul class="t-desc">
-          <li>Sécurisation et mise à jour de Jenkins — analyse de vulnérabilités et application de correctifs</li>
-          <li>Conception et automatisation de pipelines CI/CD pour fiabiliser les livraisons</li>
-          <li>Déploiement d'une infrastructure automatisée avec Ansible sur Linux et Windows</li>
-          <li>Rédaction de Playbooks pour une gestion centralisée et reproductible des configurations</li>
-        </ul>
-      </li>
-
-      <li class="t-item">
-        <time class="t-date" datetime="2023-11">Novembre 2023 — Janvier 2024</time>
-        <h3 class="t-company">Décathlon</h3>
-        <p class="t-role">Collaboration · Développeur Web · Paris, France</p>
-        <span class="t-badge b-collab">Collaboration</span>
-        <ul class="t-desc">
-          <li>Développement d'interfaces web modernes et de composants interactifs de visualisation de données</li>
-          <li>Amélioration UX/ergonomie et collaboration étroite avec l'équipe produit</li>
-        </ul>
-      </li>
-
-    </ol>
-  </section>
-
-  <!-- ══════════════════════════════
-       PROJECTS
-  ══════════════════════════════ -->
-  <section id="projects" aria-label="Projets phares">
-    <p class="section-tag">003 — Projets phares</p>
-    <h2 class="section-title">Réalisations <span>clés</span></h2>
-
-    <div class="cards-grid">
-
-      <article class="card fade-up">
-        <div class="card-icon" aria-hidden="true">💰</div>
-        <h3>Batch Financier — SBS</h3>
-        <p>Conception et optimisation de traitements batch critiques pour la gestion de flux financiers : encours, devises, opérations SI. Architecture Spring Batch modulaire et scalable, avec règles métier complexes garantissant la cohérence des données.</p>
-        <div class="card-tags">
-          <span class="tag">Java</span><span class="tag">Spring Batch</span>
-          <span class="tag">CI/CD</span><span class="tag">Git</span>
-        </div>
-      </article>
-
-      <article class="card fade-up fade-up--d1">
-        <div class="card-icon" aria-hidden="true">⚙️</div>
-        <h3>Infrastructure CI/CD — Sopra Stéria</h3>
-        <p>Sécurisation de Jenkins, conception de pipelines CI/CD automatisés et déploiement d'une infrastructure avec Ansible sur Linux et Windows. Playbooks pour une gestion centralisée et reproductible des configurations serveurs.</p>
-        <div class="card-tags">
-          <span class="tag">Jenkins</span><span class="tag">Ansible</span>
-          <span class="tag">Linux</span><span class="tag">DevOps</span>
-        </div>
-      </article>
-
-      <article class="card fade-up fade-up--d2">
-        <div class="card-icon" aria-hidden="true">📊</div>
-        <h3>Interfaces Data Viz — Décathlon</h3>
-        <p>Développement d'interfaces web modernes et de composants interactifs de visualisation de données. Amélioration significative de l'UX/ergonomie en collaboration avec l'équipe produit.</p>
-        <div class="card-tags">
-          <span class="tag">HTML</span><span class="tag">CSS</span>
-          <span class="tag">JavaScript</span><span class="tag">UX</span>
-        </div>
-      </article>
-
+    <div class="fade-up fade-up--delay">
+      <p class="section-tag">Stack technique</p>
+      <ul class="skills-list">
+        <li class="skill-row"><span class="skill-icon">⚙️</span><span class="skill-name">Programmation</span><div class="tags"><span class="tag">Java</span><span class="tag">C</span><span class="tag">C++</span><span class="tag">Bash</span><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span></div></li>
+        <li class="skill-row"><span class="skill-icon">🛠</span><span class="skill-name">DevOps</span><div class="tags"><span class="tag">Jenkins</span><span class="tag">Ansible</span><span class="tag">Docker</span><span class="tag">Git</span><span class="tag">SSH</span></div></li>
+        <li class="skill-row"><span class="skill-icon">🖥</span><span class="skill-name">Systèmes</span><div class="tags"><span class="tag">Linux</span><span class="tag">Windows</span><span class="tag">MacOS</span></div></li>
+        <li class="skill-row"><span class="skill-icon">🏗</span><span class="skill-name">Architecture</span><div class="tags"><span class="tag">Spring Batch</span><span class="tag">Jakarta EE</span><span class="tag">CI/CD</span><span class="tag">Cloud</span></div></li>
+        <li class="skill-row"><span class="skill-icon">🔒</span><span class="skill-name">Qualité</span><div class="tags"><span class="tag">Secure Coding</span><span class="tag">Tests</span><span class="tag">Big Data</span></div></li>
+      </ul>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ══════════════════════════════
-       EDUCATION
-  ══════════════════════════════ -->
-  <section id="education" aria-label="Formation">
-    <p class="section-tag">004 — Formation</p>
-    <h2 class="section-title"><span>Éducation</span></h2>
+<!-- EXPERIENCE -->
+<section id="experience">
+  <p class="section-tag">002 — Expériences</p>
+  <h2 class="section-title">Parcours <span>professionnel</span></h2>
+  <ol class="timeline">
+    <li class="t-item">
+      <time class="t-date" datetime="2025-01">Janvier 2025 — Présent</time>
+      <h3 class="t-company">74 Software SBS</h3>
+      <p class="t-role">CDI · Développeur Java · Rodez, France</p>
+      <span class="t-badge b-current">● Poste actuel</span>
+      <ul class="t-desc">
+        <li>Développement et optimisation de traitements batch critiques pour la gestion de flux financiers (encours, devises, opérations SI)</li>
+        <li>Implémentation de règles métier complexes garantissant cohérence et qualité des données</li>
+        <li>Conception de jobs Spring Batch modulaires, maintenables et scalables</li>
+        <li>Analyse et correction des anomalies : rejets, valeurs manquantes, incohérences de données</li>
+        <li>Participation active aux pipelines CI/CD : validation, tests, intégration et fiabilisation des déploiements</li>
+        <li>Optimisation continue des performances et de la stabilité des systèmes</li>
+        <li>Gestion Git : merge requests, résolution de conflits, structuration des branches</li>
+        <li>Collaboration transverse avec équipes techniques et fonctionnelles</li>
+      </ul>
+    </li>
+    <li class="t-item">
+      <time class="t-date" datetime="2024-03">Mars 2024 — Septembre 2024</time>
+      <h3 class="t-company">Sopra Stéria</h3>
+      <p class="t-role">Stage de fin d'études · DevOps · Paris, France</p>
+      <span class="t-badge b-stage">Stage</span>
+      <ul class="t-desc">
+        <li>Sécurisation et mise à jour de Jenkins — analyse de vulnérabilités et application de correctifs</li>
+        <li>Conception et automatisation de pipelines CI/CD pour fiabiliser les livraisons</li>
+        <li>Déploiement d'une infrastructure automatisée avec Ansible sur Linux et Windows</li>
+        <li>Rédaction de Playbooks pour une gestion centralisée et reproductible des configurations</li>
+      </ul>
+    </li>
+    <li class="t-item">
+      <time class="t-date" datetime="2023-11">Novembre 2023 — Janvier 2024</time>
+      <h3 class="t-company">Décathlon</h3>
+      <p class="t-role">Collaboration · Développeur Web · Paris, France</p>
+      <span class="t-badge b-collab">Collaboration</span>
+      <ul class="t-desc">
+        <li>Développement d'interfaces web modernes et de composants interactifs de visualisation de données</li>
+        <li>Amélioration UX/ergonomie et collaboration étroite avec l'équipe produit</li>
+      </ul>
+    </li>
+  </ol>
+</section>
 
-    <div class="edu-grid">
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-tag">003 — Projets phares</p>
+  <h2 class="section-title">Réalisations <span>clés</span></h2>
+  <div class="cards-grid">
+    <article class="card fade-up">
+      <div class="card-icon">💰</div>
+      <h3>Batch Financier — SBS</h3>
+      <p>Conception et optimisation de traitements batch critiques pour la gestion de flux financiers : encours, devises, opérations SI. Architecture Spring Batch modulaire et scalable, avec règles métier complexes garantissant la cohérence des données.</p>
+      <div class="card-tags"><span class="tag">Java</span><span class="tag">Spring Batch</span><span class="tag">CI/CD</span><span class="tag">Git</span></div>
+    </article>
+    <article class="card fade-up fade-up--d1">
+      <div class="card-icon">⚙️</div>
+      <h3>Infrastructure CI/CD — Sopra Stéria</h3>
+      <p>Sécurisation de Jenkins, conception de pipelines CI/CD automatisés et déploiement d'une infrastructure avec Ansible sur Linux et Windows. Playbooks pour une gestion centralisée et reproductible des configurations serveurs.</p>
+      <div class="card-tags"><span class="tag">Jenkins</span><span class="tag">Ansible</span><span class="tag">Linux</span><span class="tag">DevOps</span></div>
+    </article>
+    <article class="card fade-up fade-up--d2">
+      <div class="card-icon">📊</div>
+      <h3>Interfaces Data Viz — Décathlon</h3>
+      <p>Développement d'interfaces web modernes et de composants interactifs de visualisation de données. Amélioration significative de l'UX/ergonomie en collaboration avec l'équipe produit.</p>
+      <div class="card-tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">UX</span></div>
+    </article>
+  </div>
+</section>
 
-      <article class="edu-card fade-up">
-        <p class="edu-year">Août 2021 — Novembre 2024</p>
-        <h3 class="edu-school">EFREI Paris</h3>
-        <p class="edu-degree">Cycle Ingénieur du Numérique · Villejuif, France</p>
-        <div class="edu-tags">
-          <span class="tag">DevOps &amp; CD</span>
-          <span class="tag">Cloud &amp; Big Data</span>
-          <span class="tag">Prog. avancée</span>
-          <span class="tag">Secure Coding</span>
-          <span class="tag">Architecture logicielle</span>
-        </div>
-      </article>
+<!-- EDUCATION -->
+<section id="education">
+  <p class="section-tag">004 — Formation</p>
+  <h2 class="section-title"><span>Éducation</span></h2>
+  <div class="edu-grid">
+    <article class="edu-card fade-up">
+      <p class="edu-year">Août 2021 — Novembre 2024</p>
+      <h3 class="edu-school">EFREI Paris</h3>
+      <p class="edu-degree">Cycle Ingénieur du Numérique · Villejuif, France</p>
+      <div class="edu-tags"><span class="tag">DevOps &amp; CD</span><span class="tag">Cloud &amp; Big Data</span><span class="tag">Prog. avancée</span><span class="tag">Secure Coding</span><span class="tag">Architecture logicielle</span></div>
+    </article>
+    <article class="edu-card fade-up fade-up--d1">
+      <p class="edu-year">Octobre 2018 — Mai 2020</p>
+      <h3 class="edu-school">IUM</h3>
+      <p class="edu-degree">Cycle Préparatoire Ingénieur · Abomey-Calavi, Bénin</p>
+      <div class="edu-tags"><span class="tag">Mathématiques</span><span class="tag">Physique</span><span class="tag">Électronique</span><span class="tag">Algorithmique</span><span class="tag">Communication</span></div>
+    </article>
+  </div>
+</section>
 
-      <article class="edu-card fade-up fade-up--d1">
-        <p class="edu-year">Octobre 2018 — Mai 2020</p>
-        <h3 class="edu-school">IUM</h3>
-        <p class="edu-degree">Cycle Préparatoire Ingénieur · Abomey-Calavi, Bénin</p>
-        <div class="edu-tags">
-          <span class="tag">Mathématiques</span>
-          <span class="tag">Physique</span>
-          <span class="tag">Électronique</span>
-          <span class="tag">Algorithmique</span>
-          <span class="tag">Communication</span>
-        </div>
-      </article>
+<!-- SOFTSKILLS -->
+<section id="softskills">
+  <p class="section-tag">005 — Soft Skills</p>
+  <h2 class="section-title">Ce qui me <span>distingue</span></h2>
+  <ul class="soft-grid fade-up">
+    <li class="soft-item"><span class="soft-emoji">🔄</span><span class="soft-name">Flexibilité</span></li>
+    <li class="soft-item"><span class="soft-emoji">📋</span><span class="soft-name">Organisation</span></li>
+    <li class="soft-item"><span class="soft-emoji">🎯</span><span class="soft-name">Autonomie</span></li>
+    <li class="soft-item"><span class="soft-emoji">🗣</span><span class="soft-name">Communication</span></li>
+    <li class="soft-item"><span class="soft-emoji">🧘</span><span class="soft-name">Patience</span></li>
+    <li class="soft-item"><span class="soft-emoji">🤝</span><span class="soft-name">Entraide</span></li>
+    <li class="soft-item"><span class="soft-emoji">⚡</span><span class="soft-name">Dynamisme</span></li>
+  </ul>
+</section>
 
+<!-- INTERESTS -->
+<section id="interests">
+  <p class="section-tag">006 — Centres d'intérêt</p>
+  <h2 class="section-title">Au-delà <span>du code</span></h2>
+  <ul class="interests-wrap fade-up">
+    <li class="interest-pill"><span class="pi">🎵</span><span>Musique — R&amp;B, Rap</span></li>
+    <li class="interest-pill"><span class="pi">💻</span><span>Développement logiciel</span></li>
+    <li class="interest-pill"><span class="pi">📚</span><span>Lecture — Développement personnel</span></li>
+    <li class="interest-pill"><span class="pi">🏋️</span><span>Sport — Musculation</span></li>
+    <li class="interest-pill"><span class="pi">🎮</span><span>Jeu vidéo — FIFA</span></li>
+  </ul>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="contact-left fade-up">
+      <p class="section-tag">007 — Contact</p>
+      <h2 class="section-title">Travaillons <span>ensemble</span></h2>
+      <p>Ouvert aux opportunités, collaborations et échanges techniques. N'hésitez pas à me contacter directement par téléphone ou par e-mail — je réponds dans les plus brefs délais.</p>
+      <address class="contact-links">
+        <a href="tel:0033784201781" class="contact-link"><span class="cl-icon">📞</span>+33 7 84 20 17 81</a>
+        <a href="mailto:aurelgbaguidi@yahoo.com" class="contact-link"><span class="cl-icon">✉</span>aurelgbaguidi@yahoo.com</a>
+        <a href="https://www.linkedin.com/in/delidji-gbaguidi/" target="_blank" rel="noopener noreferrer" class="contact-link"><span class="cl-icon">🔗</span>LinkedIn — Dèlidji GBAGUIDI</a>
+        <span class="contact-link contact-link--static"><span class="cl-icon">📍</span>Rodez, France</span>
+      </address>
     </div>
-  </section>
+    <div class="contact-right fade-up fade-up--delay">
+      <p class="cr-label">Ingénieur Logiciel</p>
+      <span class="big-init">DG</span>
+      <p class="cr-sub">Java · Spring Batch · DevOps<br>EFREI Paris · 74 Software SBS<br>Bénin → France 🇧🇯 → 🇫🇷</p>
+    </div>
+  </div>
+</section>
 
-  <!-- ══════════════════════════════
-       SOFTSKILLS
-  ══════════════════════════════ -->
-  <section id="softskills" aria-label="Soft skills">
-    <p class="section-tag">005 — Soft Skills</p>
-    <h2 class="section-title">Ce qui me <span>distingue</span></h2>
+<footer>
+  <span>© 2025 — Dèlidji Gbaguidi</span>
+  <span>Ingénieur en développement logiciel</span>
+  <span>Rodez, France</span>
+</footer>
 
-    <ul class="soft-grid fade-up" aria-label="Qualités personnelles">
-      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">🔄</span><span class="soft-name">Flexibilité</span></li>
-      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">📋</span><span class="soft-name">Organisation</span></li>
-      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">🎯</span><span class="soft-name">Autonomie</span></li>
-      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">🗣</span><span class="soft-name">Communication</span></li>
-      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">🧘</span><span class="soft-name">Patience</span></li>
-      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">🤝</span><span class="soft-name">Entraide</span></li>
-      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">⚡</span><span class="soft-name">Dynamisme</span></li>
-    </ul>
-  </section>
+<script>
+(function(){
+'use strict';
 
-  <!-- ══════════════════════════════
-       INTERESTS
-  ══════════════════════════════ -->
-  <section id="interests" aria-label="Centres d'intérêt">
-    <p class="section-tag">006 — Centres d'intérêt</p>
-    <h2 class="section-title">Au-delà <span>du code</span></h2>
+/* ── HAMBURGER — inline, pas de dépendance externe ── */
+var ham = document.getElementById('hamburger');
+var mob = document.getElementById('mobileMenu');
 
-    <ul class="interests-wrap fade-up" aria-label="Loisirs">
-      <li class="interest-pill"><span class="pi" aria-hidden="true">🎵</span><span>Musique — R&amp;B, Rap</span></li>
-      <li class="interest-pill"><span class="pi" aria-hidden="true">💻</span><span>Développement logiciel</span></li>
-      <li class="interest-pill"><span class="pi" aria-hidden="true">📚</span><span>Lecture — Développement personnel</span></li>
-      <li class="interest-pill"><span class="pi" aria-hidden="true">🏋️</span><span>Sport — Musculation</span></li>
-      <li class="interest-pill"><span class="pi" aria-hidden="true">🎮</span><span>Jeu vidéo — FIFA</span></li>
-    </ul>
-  </section>
+function openMenu(){
+  ham.classList.add('open');
+  mob.classList.add('open');
+  ham.setAttribute('aria-expanded','true');
+  document.body.style.overflow='hidden';
+}
+function closeMenu(){
+  ham.classList.remove('open');
+  mob.classList.remove('open');
+  ham.setAttribute('aria-expanded','false');
+  document.body.style.overflow='';
+}
 
-  <!-- ══════════════════════════════
-       CONTACT
-  ══════════════════════════════ -->
-  <section id="contact" aria-label="Contact">
-    <div class="contact-wrap">
+ham.addEventListener('click', function(){
+  ham.classList.contains('open') ? closeMenu() : openMenu();
+});
+// Fermer en cliquant les liens du menu
+mob.querySelectorAll('a').forEach(function(a){
+  a.addEventListener('click', closeMenu);
+});
+// Fermer en cliquant le fond
+mob.addEventListener('click', function(e){
+  if(e.target === mob) closeMenu();
+});
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape') closeMenu();
+});
 
-      <div class="contact-left fade-up">
-        <p class="section-tag">007 — Contact</p>
-        <h2 class="section-title">Travaillons <span>ensemble</span></h2>
-        <p>
-          Ouvert aux opportunités, collaborations et échanges techniques.
-          N'hésitez pas à me contacter directement par téléphone ou par e-mail —
-          je réponds dans les plus brefs délais.
-        </p>
-        <address class="contact-links">
-          <a href="tel:0033784201781" class="contact-link">
-            <span class="cl-icon" aria-hidden="true">📞</span>+33 7 84 20 17 81
-          </a>
-          <a href="/cdn-cgi/l/email-protection#52332720373e35303335273b363b122b333a3d3d7c313d3f" class="contact-link">
-            <span class="cl-icon" aria-hidden="true">✉</span><span class="__cf_email__" data-cfemail="3b5a4e495e575c595a5c4e525f527b425a53545415585456">[email&#160;protected]</span>
-          </a>
-          <a href="https://www.linkedin.com/in/delidji-gbaguidi/" target="_blank" rel="noopener noreferrer" class="contact-link">
-            <span class="cl-icon" aria-hidden="true">🔗</span>LinkedIn — Dèlidji GBAGUIDI
-          </a>
-          <span class="contact-link contact-link--static">
-            <span class="cl-icon" aria-hidden="true">📍</span>Rodez, France
-          </span>
-        </address>
-      </div>
+/* ── JS-READY (scroll reveal) ── */
+document.documentElement.classList.add('js-ready');
 
-      <div class="contact-right fade-up fade-up--delay" aria-hidden="true">
-        <p class="cr-label">Ingénieur Logiciel</p>
-        <span class="big-init">DG</span>
-        <p class="cr-su
+var io = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:.07});
+document.querySelectorAll('.fade-up,.t-item,.edu-card').forEach(function(el){ io.observe(el); });
+document.querySelectorAll('.t-item').forEach(function(el,i){ el.style.transitionDelay=(i*.1)+'s'; });
+
+/* ── CURSOR ── */
+if(window.matchMedia('(pointer:fine)').matches){
+  var cur=document.getElementById('cursor'), ring=document.getElementById('cursorRing');
+  var mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});
+  (function tick(){
+    cur.style.left=mx+'px';cur.style.top=my+'px';
+    rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+    ring.style.left=rx+'px';ring.style.top=ry+'px';
+    requestAnimationFrame(tick);
+  })();
+  document.querySelectorAll('a,button,.skill-row,.soft-item,.interest-pill,.card,.edu-card').forEach(function(el){
+    el.addEventListener('mouseenter',function(){cur.style.transform='translate(-50%,-50%) scale(2.5)';ring.style.opacity='0';});
+    el.addEventListener('mouseleave',function(){cur.style.transform='translate(-50%,-50%) scale(1)';ring.style.opacity='.5';});
+  });
+}
+
+/* ── CARD TILT ── */
+if(window.matchMedia('(pointer:fine)').matches){
+  document.querySelectorAll('.card').forEach(function(card){
+    card.addEventListener('mousemove',function(e){
+      var r=card.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+      card.style.transform='perspective(600px) rotateX('+(-((y-r.height/2)/22))+'deg) rotateY('+((x-r.width/2)/22)+'deg) translateY(-4px)';
+      card.style.setProperty('--mx',(x/r.width*100)+'%');
+      card.style.setProperty('--my',(y/r.height*100)+'%');
+    });
+    card.addEventListener('mouseleave',function(){card.style.transform='';});
+  });
+}
+
+/* ── PARTICLES ── */
+var canvas=document.getElementById('heroCanvas');
+if(canvas){
+  var ctx=canvas.getContext('2d');
+  var COLORS=['rgba(124,58,237,','rgba(6,182,212,','rgba(168,85,247,','rgba(34,211,238,'];
+  function mkP(w,h){return{x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.8+.4,a:Math.random()*.5+.1,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,va:(Math.random()-.5)*.003,c:COLORS[Math.floor(Math.random()*COLORS.length)]};}
+  var W,H,ps;
+  function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;var n=W<600?60:W<1024?120:200;ps=Array.from({length:n},function(){return mkP(W,H);});}
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ps.forEach(function(p){
+      p.x+=p.vx;p.y+=p.vy;p.a+=p.va;
+      if(p.a>.65||p.a<.05)p.va*=-1;
+      if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+      var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*4);
+      g.addColorStop(0,p.c+p.a+')');g.addColorStop(.4,p.c+(p.a*.4)+')');g.addColorStop(1,p.c+'0)');
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r*4,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  resize();draw();
+  new ResizeObserver(resize).observe(canvas.parentElement);
+}
+
+/* ── TYPEWRITER ── */
+var typed=document.getElementById('heroTyped');
+if(typed){
+  var txt='Ingénieur logiciel Java, Spring Batch et DevOps. Passionné par l\'automatisation de batchs critiques et la fiabilisation des livraisons CI/CD.';
+  var i=0;
+  setTimeout(function type(){
+    if(i<=txt.length){typed.textContent=txt.slice(0,i++);setTimeout(type,28);}
+  },600);
+}
+
+})();
+</script>
+</body>
+</html>
