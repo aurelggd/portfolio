@@ -1,477 +1,391 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dèlidji GBAGUIDI — Ingénieur Logiciel</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<style>
-/* ============================================================
-   ROOT & RESET
-============================================================ */
-:root {
-  --bg:#080d1a; --surface:#0d1526; --surface2:#111d33;
-  --accent:#e8ff47; --accent2:#ff6b35; --accent3:#47d4ff;
-  --text:#eef2ff; --muted:#5a6a8a; --border:rgba(100,140,255,0.1);
-  --nav-h:64px; --px:clamp(1rem,5vw,3rem);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;overflow-x:hidden}
-@media(pointer:fine){body{cursor:none}}
-
-/* NOISE */
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
-
-/* ============================================================
-   CURSOR
-============================================================ */
-.cursor,.cursor-ring{display:none}
-@media(pointer:fine){
-  .cursor{display:block;position:fixed;top:0;left:0;width:12px;height:12px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s;mix-blend-mode:difference}
-  .cursor-ring{display:block;position:fixed;top:0;left:0;width:36px;height:36px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5}
-}
-
-/* ============================================================
-   NAV
-============================================================ */
-nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 var(--px);z-index:200;backdrop-filter:blur(20px);background:rgba(8,13,26,.88);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;color:var(--accent);letter-spacing:-.02em;z-index:201}
-.nav-links{display:flex;gap:2.5rem;list-style:none}
-.nav-links a{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
-.nav-links a:hover{color:var(--text)}
-.nav-right{display:flex;align-items:center;gap:1rem}
-.nav-badge{background:var(--accent);color:#000;font-size:.62rem;font-weight:700;letter-spacing:.1em;padding:.35rem .85rem;border-radius:100px;text-transform:uppercase}
-
-/* HAMBURGER */
-.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;background:none;border:none;cursor:pointer;z-index:201;padding:4px}
-.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:transform .3s,opacity .3s,width .3s}
-.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.hamburger.open span:nth-child(2){opacity:0;width:0}
-.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-
-/* MOBILE MENU */
-.mobile-menu{display:none;position:fixed;inset:0;background:rgba(8,13,26,.98);z-index:190;flex-direction:column;justify-content:center;align-items:center;gap:2.5rem;backdrop-filter:blur(20px);opacity:0;pointer-events:none;transition:opacity .3s}
-.mobile-menu.open{opacity:1;pointer-events:all}
-.mobile-menu a{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(1.8rem,8vw,3rem);color:var(--text);text-decoration:none;letter-spacing:-.02em;transition:color .2s}
-.mobile-menu a:hover{color:var(--accent)}
-.mob-badge{margin-top:1rem;background:var(--accent);color:#000;font-size:.7rem;font-weight:700;letter-spacing:.1em;padding:.5rem 1.2rem;border-radius:100px;text-transform:uppercase}
-
-@media(max-width:860px){
-  .nav-links{display:none}
-  .nav-badge{display:none}
-  .hamburger{display:flex}
-  .mobile-menu{display:flex}
-}
-
-/* ============================================================
-   SECTIONS COMMON
-============================================================ */
-section{padding:clamp(3.5rem,8vw,6rem) var(--px);position:relative}
-.section-label{font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:clamp(1.5rem,4vw,3rem);display:flex;align-items:center;gap:1rem}
-.section-label::after{content:'';flex:1;max-width:80px;height:1px;background:var(--border)}
-h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.9rem,5vw,3.5rem);letter-spacing:-.03em;line-height:1.05;margin-bottom:clamp(2rem,5vw,3rem)}
-
-/* ============================================================
-   HERO
-============================================================ */
-#hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-top:calc(var(--nav-h) + 2rem);padding-bottom:clamp(2.5rem,6vw,4rem);padding-left:var(--px);padding-right:var(--px);position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 40%,rgba(232,255,71,.05) 0%,transparent 70%),radial-gradient(ellipse 50% 50% at 20% 80%,rgba(71,212,255,.06) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 50% 50%,rgba(30,60,140,.4) 0%,transparent 80%)}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%)}
-.hero-label{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem;display:flex;align-items:center;gap:.75rem;position:relative;z-index:1}
-.hero-label::before{content:'';display:block;width:2rem;height:1px;background:var(--accent);flex-shrink:0}
-.hero-name{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,10vw,8rem);font-weight:800;line-height:.92;letter-spacing:-.04em;margin-bottom:1.2rem;position:relative;z-index:1}
-.hero-name span{color:var(--accent);display:block}
-.hero-title{font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(1rem,2.5vw,1.8rem);color:var(--muted);margin-bottom:clamp(1.5rem,4vw,3rem);max-width:600px;line-height:1.5;position:relative;z-index:1}
-.hero-title strong{color:var(--text);font-style:normal;font-family:'Syne',sans-serif}
-.hero-meta{display:flex;gap:clamp(1rem,3vw,3rem);align-items:flex-start;flex-wrap:wrap;position:relative;z-index:1}
-.hero-status{display:flex;align-items:center;gap:.6rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;flex-shrink:0}
-.status-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80;animation:pulse-green 2s infinite;flex-shrink:0}
-@keyframes pulse-green{0%,100%{box-shadow:0 0 4px #4ade80}50%{box-shadow:0 0 12px #4ade80,0 0 20px rgba(74,222,128,.3)}}
-.hero-contact{display:flex;flex-wrap:wrap;gap:.8rem 1.5rem}
-.hero-contact a{display:flex;align-items:center;gap:.4rem;font-size:.7rem;color:var(--muted);text-decoration:none;transition:color .2s}
-.hero-contact a:hover{color:var(--accent)}
-.hero-scroll{position:absolute;right:var(--px);bottom:clamp(2.5rem,6vw,4rem);writing-mode:vertical-rl;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:1rem;animation:scrollPulse 2s ease-in-out infinite;z-index:1}
-.hero-scroll::after{content:'';display:block;width:1px;height:60px;background:var(--muted)}
-@keyframes scrollPulse{0%,100%{opacity:.5}50%{opacity:1}}
-
-/* ============================================================
-   ABOUT
-============================================================ */
-#about{background:var(--surface)}
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:start}
-.about-text p{font-size:clamp(.82rem,1.5vw,.95rem);line-height:1.85;color:rgba(238,242,255,.75);margin-bottom:1.1rem;text-align:justify;hyphens:auto}
-.about-text p strong{color:var(--text);font-weight:600}
-.lang-item{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;padding:.9rem 0;border-bottom:1px solid var(--border)}
-.lang-name{font-family:'Syne',sans-serif;font-weight:600;font-size:.85rem}
-.lang-right{display:flex;gap:.8rem;align-items:center;flex-wrap:wrap}
-.lang-tag{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.28rem .7rem;border:1px solid var(--border);border-radius:100px;color:var(--muted)}
-.lang-tag.native{border-color:var(--accent);color:var(--accent)}
-.lang-score{font-size:.65rem;color:var(--accent2);white-space:nowrap}
-.skills-container{display:flex;flex-direction:column;gap:.7rem}
-.skill-row{display:flex;align-items:center;gap:1rem;padding:.85rem 1rem;border:1px solid var(--border);border-radius:8px;background:var(--surface2);transition:border-color .3s,transform .2s;cursor:default}
-@media(pointer:fine){.skill-row:hover{border-color:rgba(232,255,71,.3);transform:translateX(6px)}}
-.skill-icon{font-size:1rem;width:1.8rem;text-align:center;flex-shrink:0}
-.skill-name{font-family:'Syne',sans-serif;font-weight:600;font-size:.78rem;flex:1;min-width:70px}
-.skill-tags{display:flex;flex-wrap:wrap;gap:.35rem}
-.tag{font-size:.58rem;letter-spacing:.07em;text-transform:uppercase;padding:.22rem .55rem;background:rgba(255,255,255,.05);border-radius:4px;color:var(--muted);white-space:nowrap}
-
-/* ============================================================
-   EXPERIENCE
-============================================================ */
-#experience{background:var(--bg)}
-.timeline{display:flex;flex-direction:column;position:relative}
-.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--accent),var(--accent3),transparent)}
-.timeline-item{padding:0 0 3rem 2.2rem;position:relative;opacity:0;transform:translateX(-20px);transition:opacity .5s,transform .5s}
-.timeline-item.visible{opacity:1;transform:translateX(0)}
-.timeline-item::before{content:'';position:absolute;left:-4px;top:6px;width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
-.exp-date{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
-.exp-company{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.1rem,2.5vw,1.4rem);letter-spacing:-.02em;margin-bottom:.2rem}
-.exp-role{font-size:.75rem;color:var(--accent2);letter-spacing:.04em;margin-bottom:.8rem}
-.exp-badge{display:inline-flex;align-items:center;gap:.35rem;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;padding:.28rem .65rem;border-radius:4px;font-weight:600}
-.badge-current{background:rgba(74,222,128,.1);color:#4ade80;border:1px solid rgba(74,222,128,.3)}
-.badge-stage{background:rgba(232,255,71,.1);color:var(--accent);border:1px solid rgba(232,255,71,.3)}
-.badge-collab{background:rgba(71,212,255,.1);color:var(--accent3);border:1px solid rgba(71,212,255,.3)}
-.exp-desc{margin-top:.9rem}
-.exp-desc ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
-.exp-desc li{font-size:clamp(.74rem,1.4vw,.82rem);line-height:1.75;color:rgba(238,242,255,.65);text-align:justify;hyphens:auto}
-.exp-desc li::before{content:'→ ';color:var(--accent3)}
-
-/* ============================================================
-   EDUCATION
-============================================================ */
-#education{background:var(--surface)}
-.edu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:1.2rem}
-.edu-card{padding:clamp(1.2rem,3vw,2rem);border:1px solid var(--border);border-radius:12px;background:var(--bg);position:relative;overflow:hidden;opacity:0;transform:translateY(20px);transition:opacity .5s,transform .5s,border-color .3s}
-.edu-card.visible{opacity:1;transform:translateY(0)}
-.edu-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s}
-@media(pointer:fine){.edu-card:hover{border-color:rgba(232,255,71,.2);transform:translateY(-4px)}.edu-card:hover::before{transform:scaleX(1)}}
-.edu-year{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem}
-.edu-school{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(1rem,2.5vw,1.15rem);margin-bottom:.3rem}
-.edu-degree{font-size:.75rem;color:var(--accent3);margin-bottom:.9rem}
-.edu-tags{display:flex;flex-wrap:wrap;gap:.4rem}
-
-/* ============================================================
-   SOFTSKILLS
-============================================================ */
-#softskills{background:var(--bg)}
-.softskills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,45%),1fr));gap:1px;border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.soft-item{padding:clamp(1.2rem,3vw,2rem) clamp(1rem,2.5vw,1.5rem);background:var(--surface);display:flex;flex-direction:column;gap:.6rem;transition:background .3s;cursor:default}
-@media(pointer:fine){.soft-item:hover{background:var(--surface2)}}
-.soft-emoji{font-size:1.6rem}
-.soft-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem}
-
-/* ============================================================
-   INTERESTS
-============================================================ */
-#interests{background:var(--surface)}
-.interests-row{display:flex;flex-wrap:wrap;gap:.75rem}
-.interest-pill{display:flex;align-items:center;gap:.65rem;padding:.85rem 1.3rem;border:1px solid var(--border);border-radius:100px;font-family:'Syne',sans-serif;font-weight:600;font-size:clamp(.7rem,1.5vw,.82rem);transition:all .3s;cursor:default}
-@media(pointer:fine){.interest-pill:hover{border-color:var(--accent);background:rgba(232,255,71,.05);transform:scale(1.04)}}
-.pill-icon{font-size:1.1rem;flex-shrink:0}
-
-/* ============================================================
-   CONTACT
-============================================================ */
-#contact{background:var(--bg);display:grid;grid-template-columns:1fr 1fr;gap:clamp(2.5rem,6vw,5rem);align-items:center}
-#contact .contact-left p{font-size:.83rem;line-height:1.8;color:var(--muted);margin-bottom:2rem;text-align:justify;hyphens:auto}
-.contact-links{display:flex;flex-direction:column;gap:.75rem}
-.contact-link{display:flex;align-items:center;gap:.9rem;padding:.9rem 1.1rem;border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);font-size:.78rem;transition:all .25s}
-@media(pointer:fine){.contact-link:hover{border-color:var(--accent);color:var(--accent);transform:translateX(6px)}}
-.contact-link-icon{font-size:1rem;width:1.4rem;text-align:center;flex-shrink:0}
-.contact-right{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:clamp(1.5rem,4vw,2.5rem)}
-.contact-right-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;margin-bottom:1rem;color:var(--accent)}
-.big-initial{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(4rem,12vw,9rem);line-height:1;letter-spacing:-.05em;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-bottom:.8rem}
-.contact-right-sub{font-size:.72rem;color:var(--muted);line-height:1.9}
-
-/* ============================================================
-   FOOTER
-============================================================ */
-footer{padding:1.5rem var(--px);border-top:1px solid var(--border);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.5rem;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-
-/* ============================================================
-   ANIMATIONS
-============================================================ */
-.fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
-.fade-up.visible{opacity:1;transform:translateY(0)}
-
-/* ============================================================
-   RESPONSIVE — TABLET (max 900px)
-============================================================ */
-@media(max-width:900px){
-  .about-grid{grid-template-columns:1fr;gap:3rem}
-  #contact{grid-template-columns:1fr}
-  .contact-right{display:none}
-  .hero-scroll{display:none}
-}
-
-/* ============================================================
-   RESPONSIVE — MOBILE (max 600px)
-============================================================ */
-@media(max-width:600px){
-  :root{--nav-h:56px}
-  .hero-meta{flex-direction:column;gap:1rem}
-  .hero-contact{gap:.6rem 1rem}
-  .hero-contact a{font-size:.65rem}
-  .skill-row{flex-wrap:wrap}
-  .skill-tags{width:100%}
-  .softskills-grid{grid-template-columns:repeat(2,1fr)}
-  .interests-row{gap:.6rem}
-  .interest-pill{padding:.7rem 1rem;font-size:.7rem}
-  footer{justify-content:center;text-align:center}
-  footer span:nth-child(2){display:none}
-}
-
-/* ============================================================
-   RESPONSIVE — SMALL MOBILE (max 380px)
-============================================================ */
-@media(max-width:380px){
-  nav{padding:0 1rem}
-  .hero-name{letter-spacing:-.02em}
-  .softskills-grid{grid-template-columns:1fr 1fr}
-  .interest-pill span:last-child{font-size:.65rem}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Dèlidji GBAGUIDI — Ingénieur logiciel Java, Spring Batch et DevOps. CDI chez 74 Software SBS, Rodez." />
+  <title>Dèlidji GBAGUIDI — Ingénieur Logiciel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+  <!-- ── Custom Cursor ── -->
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
 
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#about"      onclick="closeMobile()">À propos</a>
-  <a href="#experience" onclick="closeMobile()">Expériences</a>
-  <a href="#education"  onclick="closeMobile()">Formation</a>
-  <a href="#softskills" onclick="closeMobile()">Softskills</a>
-  <a href="#contact"    onclick="closeMobile()">Contact</a>
-  <div class="mob-badge">● Disponible</div>
-</div>
-
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">DG.</div>
-  <ul class="nav-links">
-    <li><a href="#about">À propos</a></li>
-    <li><a href="#experience">Expériences</a></li>
-    <li><a href="#education">Formation</a></li>
-    <li><a href="#softskills">Softskills</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <div class="nav-right">
-    <div class="nav-badge">Disponible</div>
-    <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu">
-      <span></span><span></span><span></span>
-    </button>
+  <!-- ── Mobile Overlay Menu ── -->
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Navigation mobile">
+    <a href="#about"      onclick="closeMenu()">À propos</a>
+    <a href="#experience" onclick="closeMenu()">Expériences</a>
+    <a href="#projects"   onclick="closeMenu()">Projets</a>
+    <a href="#education"  onclick="closeMenu()">Formation</a>
+    <a href="#contact"    onclick="closeMenu()">Contact</a>
+    <div class="mob-badge" aria-label="Statut : disponible">● Disponible</div>
   </div>
-</nav>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-label">Ingénieur en développement logiciel</div>
-  <h1 class="hero-name">Dèlidji<span>Gbaguidi.</span></h1>
-  <p class="hero-title">
-    <strong>Java · Spring Batch · DevOps</strong> — Architecte de traitements batch critiques &amp; pipelines CI/CD. Passionné par l'automatisation et la qualité des données.
-  </p>
-  <div class="hero-meta">
-    <div class="hero-status">
-      <div class="status-dot"></div>
+  <!-- ══════════════════════════════
+       NAV
+  ══════════════════════════════ -->
+  <nav role="navigation" aria-label="Navigation principale">
+    <div class="logo" aria-label="Dèlidji Gbaguidi">Dèlidji GBAGUIDI.</div>
+
+    <ul class="nav-links">
+      <li><a href="#about">À propos</a></li>
+      <li><a href="#experience">Expériences</a></li>
+      <li><a href="#projects">Projets</a></li>
+      <li><a href="#education">Formation</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <div class="nav-badge" aria-label="Statut : disponible">● Disponible</div>
+      <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════
+       HERO
+  ══════════════════════════════ -->
+  <section id="hero" aria-label="Introduction">
+
+    <!-- Particle canvas (JS-driven) -->
+    <canvas id="heroCanvas" aria-hidden="true"></canvas>
+
+    <!-- Eyebrow status -->
+    <div class="hero-eyebrow">
+      <div class="status-dot" aria-hidden="true"></div>
       CDI · 74 Software SBS · Rodez
     </div>
-    <div class="hero-contact">
+
+    <!-- Heading: each word wrapped for staggered reveal + gradient -->
+    <h1 id="heroTitle" aria-label="Je construis des systèmes robustes et scalables">
+      <span class="hw">Je</span>&#32;<span class="hw">construis</span>&#32;<span class="hw">des</span>&#32;<span class="hw">systèmes</span>&#32;<span class="hw hw--grad">robustes</span>&#32;<span class="hw hw--plain">et</span>&#32;<span class="hw hw--grad">scalables</span>
+    </h1>
+
+    <!-- Animated subtitle (typewriter) -->
+    <p class="hero-sub">
+      <span id="heroTyped" aria-label="Ingénieur logiciel spécialisé en Java, Spring Batch et DevOps. Passionné par l'automatisation de batchs critiques et la fiabilisation des livraisons CI/CD."></span>
+      <span class="hero-caret" aria-hidden="true">|</span>
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#contact" class="btn-primary">Me contacter</a>
+      <a href="#experience" class="btn-secondary">Voir mon parcours</a>
+    </div>
+
+    <div class="hero-meta" aria-label="Coordonnées">
       <a href="tel:0033784201781">📞 +33 7 84 20 17 81</a>
       <a href="mailto:aurelgbaguidi@yahoo.com">✉ aurelgbaguidi@yahoo.com</a>
-      <a href="https://www.linkedin.com/in/d%C3%A8lidji-gbaguidi/" target="_blank">🔗 LinkedIn</a>
+      <a href="https://www.linkedin.com/in/delidji-gbaguidi/" target="_blank" rel="noopener noreferrer">🔗 LinkedIn</a>
+      <span class="hero-meta-location">📍 Rodez, France</span>
     </div>
-  </div>
-  <div class="hero-scroll">Scroll</div>
-</section>
+  </section>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-label">001 — Profil</div>
-  <div class="about-grid">
-    <div class="about-text fade-up">
-      <h2>Qui suis-je ?</h2>
-      <p><strong>Ingénieur logiciel Java (Jakarta EE) et Spring Batch</strong>, diplômé de l'EFREI Paris, avec un fort intérêt pour le traitement de données à grande échelle et l'automatisation de batchs complexes.</p>
-      <p>Je contribue activement à la mise en place de pipelines CI/CD afin de garantir performance et fiabilité des systèmes. Mon parcours franco-béninois m'a forgé une capacité d'adaptation unique et une vision globale des projets techniques.</p>
-      <p>Au-delà du code, je suis animé par la rigueur, l'amélioration continue et la transmission — des valeurs que j'applique aussi bien dans mes projets professionnels que dans ma vie personnelle.</p>
-      <div style="margin-top:2.5rem">
-        <div class="section-label" style="margin-bottom:1.2rem">Langues</div>
-        <div class="lang-item">
-          <span class="lang-name">Français</span>
-          <div class="lang-right"><span class="lang-tag native">Langue maternelle</span></div>
+  <!-- ══════════════════════════════
+       ABOUT
+  ══════════════════════════════ -->
+  <section id="about" aria-label="Profil">
+    <div class="about-wrapper">
+
+      <!-- Bio + Langues -->
+      <div class="fade-up">
+        <p class="section-tag">001 — Profil</p>
+        <h2 class="section-title">Qui <span>suis-je</span> ?</h2>
+
+        <div class="about-text">
+          <p>
+            <strong>Ingénieur logiciel Java (Jakarta EE) et Spring Batch</strong>, diplômé de l'EFREI Paris,
+            avec un fort intérêt pour le traitement de données à grande échelle et l'automatisation de batchs complexes.
+          </p>
+          <p>
+            Je contribue activement à la mise en place de pipelines CI/CD afin de garantir performance
+            et fiabilité des systèmes. Mon parcours franco-béninois m'a forgé une capacité d'adaptation
+            unique et une vision globale des projets techniques.
+          </p>
+          <p>
+            Au-delà du code, je suis animé par la rigueur, l'amélioration continue et la transmission —
+            des valeurs que j'applique aussi bien dans mes projets professionnels que dans ma vie personnelle.
+          </p>
         </div>
-        <div class="lang-item">
-          <span class="lang-name">Anglais</span>
-          <div class="lang-right">
-            <span class="lang-score">TOEIC 925 pts · 2024</span>
-            <span class="lang-tag">Niveau B2</span>
+
+        <div class="langs-block">
+          <p class="section-tag">Langues</p>
+          <div class="lang-row">
+            <span class="lang-name">Français</span>
+            <div class="lang-right">
+              <span class="pill accent">Langue maternelle</span>
+            </div>
+          </div>
+          <div class="lang-row">
+            <span class="lang-name">Anglais</span>
+            <div class="lang-right">
+              <span class="lang-score">TOEIC 925 pts · 2024</span>
+              <span class="pill">Niveau B2</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="fade-up" style="transition-delay:.12s">
-      <div class="section-label" style="margin-bottom:1.2rem">Stack technique</div>
-      <div class="skills-container">
-        <div class="skill-row"><div class="skill-icon">⚙️</div><div class="skill-name">Programmation</div><div class="skill-tags"><span class="tag">Java</span><span class="tag">C</span><span class="tag">C++</span><span class="tag">Bash</span><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span></div></div>
-        <div class="skill-row"><div class="skill-icon">🛠</div><div class="skill-name">DevOps</div><div class="skill-tags"><span class="tag">Jenkins</span><span class="tag">Ansible</span><span class="tag">Docker</span><span class="tag">Git</span><span class="tag">SSH</span></div></div>
-        <div class="skill-row"><div class="skill-icon">🖥</div><div class="skill-name">Systèmes</div><div class="skill-tags"><span class="tag">Linux</span><span class="tag">Windows</span><span class="tag">MacOS</span></div></div>
-        <div class="skill-row"><div class="skill-icon">🏗</div><div class="skill-name">Architecture</div><div class="skill-tags"><span class="tag">Spring Batch</span><span class="tag">Jakarta EE</span><span class="tag">CI/CD</span><span class="tag">Cloud</span></div></div>
-        <div class="skill-row"><div class="skill-icon">🔒</div><div class="skill-name">Qualité</div><div class="skill-tags"><span class="tag">Secure Coding</span><span class="tag">Tests</span><span class="tag">Big Data</span></div></div>
+
+      <!-- Stack technique -->
+      <div class="fade-up fade-up--delay">
+        <p class="section-tag">Stack technique</p>
+        <ul class="skills-list" aria-label="Compétences techniques">
+          <li class="skill-row">
+            <span class="skill-icon" aria-hidden="true">⚙️</span>
+            <span class="skill-name">Programmation</span>
+            <div class="tags">
+              <span class="tag">Java</span><span class="tag">C</span><span class="tag">C++</span>
+              <span class="tag">Bash</span><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span>
+            </div>
+          </li>
+          <li class="skill-row">
+            <span class="skill-icon" aria-hidden="true">🛠</span>
+            <span class="skill-name">DevOps</span>
+            <div class="tags">
+              <span class="tag">Jenkins</span><span class="tag">Ansible</span>
+              <span class="tag">Docker</span><span class="tag">Git</span><span class="tag">SSH</span>
+            </div>
+          </li>
+          <li class="skill-row">
+            <span class="skill-icon" aria-hidden="true">🖥</span>
+            <span class="skill-name">Systèmes</span>
+            <div class="tags">
+              <span class="tag">Linux</span><span class="tag">Windows</span><span class="tag">MacOS</span>
+            </div>
+          </li>
+          <li class="skill-row">
+            <span class="skill-icon" aria-hidden="true">🏗</span>
+            <span class="skill-name">Architecture</span>
+            <div class="tags">
+              <span class="tag">Spring Batch</span><span class="tag">Jakarta EE</span>
+              <span class="tag">CI/CD</span><span class="tag">Cloud</span>
+            </div>
+          </li>
+          <li class="skill-row">
+            <span class="skill-icon" aria-hidden="true">🔒</span>
+            <span class="skill-name">Qualité</span>
+            <div class="tags">
+              <span class="tag">Secure Coding</span><span class="tag">Tests</span><span class="tag">Big Data</span>
+            </div>
+          </li>
+        </ul>
       </div>
+
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- EXPERIENCE -->
-<section id="experience">
-  <div class="section-label">002 — Expériences</div>
-  <h2>Parcours<br>professionnel.</h2>
-  <div class="timeline">
-    <div class="timeline-item">
-      <div class="exp-date">Janvier 2025 — Présent</div>
-      <div class="exp-company">74 Software SBS</div>
-      <div class="exp-role">CDI · Développeur Java · Rodez, France</div>
-      <span class="exp-badge badge-current">● Poste actuel</span>
-      <div class="exp-desc"><ul>
-        <li>Développement et optimisation de traitements batch critiques pour la gestion de flux financiers (encours, devises, opérations SI)</li>
-        <li>Implémentation de règles métier complexes garantissant cohérence et qualité des données</li>
-        <li>Conception de jobs Spring Batch modulaires, maintenables et scalables</li>
-        <li>Analyse et correction des anomalies : rejets, valeurs manquantes, incohérences de données</li>
-        <li>Participation active aux pipelines CI/CD : validation, tests, intégration et fiabilisation des déploiements</li>
-        <li>Optimisation continue des performances et de la stabilité des systèmes</li>
-        <li>Gestion Git : merge requests, résolution de conflits, structuration des branches</li>
-        <li>Collaboration transverse avec équipes techniques et fonctionnelles</li>
-      </ul></div>
+  <!-- ══════════════════════════════
+       EXPERIENCE
+  ══════════════════════════════ -->
+  <section id="experience" aria-label="Expériences professionnelles">
+    <p class="section-tag">002 — Expériences</p>
+    <h2 class="section-title">Parcours <span>professionnel</span></h2>
+
+    <ol class="timeline" aria-label="Historique des postes">
+
+      <li class="t-item">
+        <time class="t-date" datetime="2025-01">Janvier 2025 — Présent</time>
+        <h3 class="t-company">74 Software SBS</h3>
+        <p class="t-role">CDI · Développeur Java · Rodez, France</p>
+        <span class="t-badge b-current">● Poste actuel</span>
+        <ul class="t-desc">
+          <li>Développement et optimisation de traitements batch critiques pour la gestion de flux financiers (encours, devises, opérations SI)</li>
+          <li>Implémentation de règles métier complexes garantissant cohérence et qualité des données</li>
+          <li>Conception de jobs Spring Batch modulaires, maintenables et scalables</li>
+          <li>Analyse et correction des anomalies : rejets, valeurs manquantes, incohérences de données</li>
+          <li>Participation active aux pipelines CI/CD : validation, tests, intégration et fiabilisation des déploiements</li>
+          <li>Optimisation continue des performances et de la stabilité des systèmes</li>
+          <li>Gestion Git : merge requests, résolution de conflits, structuration des branches</li>
+          <li>Collaboration transverse avec équipes techniques et fonctionnelles</li>
+        </ul>
+      </li>
+
+      <li class="t-item">
+        <time class="t-date" datetime="2024-03">Mars 2024 — Septembre 2024</time>
+        <h3 class="t-company">Sopra Stéria</h3>
+        <p class="t-role">Stage de fin d'études · DevOps · Paris, France</p>
+        <span class="t-badge b-stage">Stage</span>
+        <ul class="t-desc">
+          <li>Sécurisation et mise à jour de Jenkins — analyse de vulnérabilités et application de correctifs</li>
+          <li>Conception et automatisation de pipelines CI/CD pour fiabiliser les livraisons</li>
+          <li>Déploiement d'une infrastructure automatisée avec Ansible sur Linux et Windows</li>
+          <li>Rédaction de Playbooks pour une gestion centralisée et reproductible des configurations</li>
+        </ul>
+      </li>
+
+      <li class="t-item">
+        <time class="t-date" datetime="2023-11">Novembre 2023 — Janvier 2024</time>
+        <h3 class="t-company">Décathlon</h3>
+        <p class="t-role">Collaboration · Développeur Web · Paris, France</p>
+        <span class="t-badge b-collab">Collaboration</span>
+        <ul class="t-desc">
+          <li>Développement d'interfaces web modernes et de composants interactifs de visualisation de données</li>
+          <li>Amélioration UX/ergonomie et collaboration étroite avec l'équipe produit</li>
+        </ul>
+      </li>
+
+    </ol>
+  </section>
+
+  <!-- ══════════════════════════════
+       PROJECTS
+  ══════════════════════════════ -->
+  <section id="projects" aria-label="Projets phares">
+    <p class="section-tag">003 — Projets phares</p>
+    <h2 class="section-title">Réalisations <span>clés</span></h2>
+
+    <div class="cards-grid">
+
+      <article class="card fade-up">
+        <div class="card-icon" aria-hidden="true">💰</div>
+        <h3>Batch Financier — SBS</h3>
+        <p>Conception et optimisation de traitements batch critiques pour la gestion de flux financiers : encours, devises, opérations SI. Architecture Spring Batch modulaire et scalable, avec règles métier complexes garantissant la cohérence des données.</p>
+        <div class="card-tags">
+          <span class="tag">Java</span><span class="tag">Spring Batch</span>
+          <span class="tag">CI/CD</span><span class="tag">Git</span>
+        </div>
+      </article>
+
+      <article class="card fade-up fade-up--d1">
+        <div class="card-icon" aria-hidden="true">⚙️</div>
+        <h3>Infrastructure CI/CD — Sopra Stéria</h3>
+        <p>Sécurisation de Jenkins, conception de pipelines CI/CD automatisés et déploiement d'une infrastructure avec Ansible sur Linux et Windows. Playbooks pour une gestion centralisée et reproductible des configurations serveurs.</p>
+        <div class="card-tags">
+          <span class="tag">Jenkins</span><span class="tag">Ansible</span>
+          <span class="tag">Linux</span><span class="tag">DevOps</span>
+        </div>
+      </article>
+
+      <article class="card fade-up fade-up--d2">
+        <div class="card-icon" aria-hidden="true">📊</div>
+        <h3>Interfaces Data Viz — Décathlon</h3>
+        <p>Développement d'interfaces web modernes et de composants interactifs de visualisation de données. Amélioration significative de l'UX/ergonomie en collaboration avec l'équipe produit.</p>
+        <div class="card-tags">
+          <span class="tag">HTML</span><span class="tag">CSS</span>
+          <span class="tag">JavaScript</span><span class="tag">UX</span>
+        </div>
+      </article>
+
     </div>
-    <div class="timeline-item">
-      <div class="exp-date">Mars 2024 — Septembre 2024</div>
-      <div class="exp-company">Sopra Stéria</div>
-      <div class="exp-role">Stage de fin d'études · DevOps · Paris, France</div>
-      <span class="exp-badge badge-stage">Stage</span>
-      <div class="exp-desc"><ul>
-        <li>Sécurisation et mise à jour de Jenkins — analyse de vulnérabilités et application de correctifs</li>
-        <li>Conception et automatisation de pipelines CI/CD pour fiabiliser les livraisons</li>
-        <li>Déploiement d'une infrastructure automatisée avec Ansible sur Linux et Windows</li>
-        <li>Rédaction de Playbooks pour une gestion centralisée et reproductible des configurations</li>
-      </ul></div>
+  </section>
+
+  <!-- ══════════════════════════════
+       EDUCATION
+  ══════════════════════════════ -->
+  <section id="education" aria-label="Formation">
+    <p class="section-tag">004 — Formation</p>
+    <h2 class="section-title"><span>Éducation</span></h2>
+
+    <div class="edu-grid">
+
+      <article class="edu-card fade-up">
+        <p class="edu-year">Août 2021 — Novembre 2024</p>
+        <h3 class="edu-school">EFREI Paris</h3>
+        <p class="edu-degree">Cycle Ingénieur du Numérique · Villejuif, France</p>
+        <div class="edu-tags">
+          <span class="tag">DevOps &amp; CD</span>
+          <span class="tag">Cloud &amp; Big Data</span>
+          <span class="tag">Prog. avancée</span>
+          <span class="tag">Secure Coding</span>
+          <span class="tag">Architecture logicielle</span>
+        </div>
+      </article>
+
+      <article class="edu-card fade-up fade-up--d1">
+        <p class="edu-year">Octobre 2018 — Mai 2020</p>
+        <h3 class="edu-school">IUM</h3>
+        <p class="edu-degree">Cycle Préparatoire Ingénieur · Abomey-Calavi, Bénin</p>
+        <div class="edu-tags">
+          <span class="tag">Mathématiques</span>
+          <span class="tag">Physique</span>
+          <span class="tag">Électronique</span>
+          <span class="tag">Algorithmique</span>
+          <span class="tag">Communication</span>
+        </div>
+      </article>
+
     </div>
-    <div class="timeline-item">
-      <div class="exp-date">Novembre 2023 — Janvier 2024</div>
-      <div class="exp-company">Décathlon</div>
-      <div class="exp-role">Collaboration · Développeur Web · Paris, France</div>
-      <span class="exp-badge badge-collab">Collaboration</span>
-      <div class="exp-desc"><ul>
-        <li>Développement d'interfaces web modernes et de composants interactifs de visualisation de données</li>
-        <li>Amélioration UX/ergonomie et collaboration étroite avec l'équipe produit</li>
-      </ul></div>
+  </section>
+
+  <!-- ══════════════════════════════
+       SOFTSKILLS
+  ══════════════════════════════ -->
+  <section id="softskills" aria-label="Soft skills">
+    <p class="section-tag">005 — Soft Skills</p>
+    <h2 class="section-title">Ce qui me <span>distingue</span></h2>
+
+    <ul class="soft-grid fade-up" aria-label="Qualités personnelles">
+      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">🔄</span><span class="soft-name">Flexibilité</span></li>
+      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">📋</span><span class="soft-name">Organisation</span></li>
+      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">🎯</span><span class="soft-name">Autonomie</span></li>
+      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">🗣</span><span class="soft-name">Communication</span></li>
+      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">🧘</span><span class="soft-name">Patience</span></li>
+      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">🤝</span><span class="soft-name">Entraide</span></li>
+      <li class="soft-item"><span class="soft-emoji" aria-hidden="true">⚡</span><span class="soft-name">Dynamisme</span></li>
+    </ul>
+  </section>
+
+  <!-- ══════════════════════════════
+       INTERESTS
+  ══════════════════════════════ -->
+  <section id="interests" aria-label="Centres d'intérêt">
+    <p class="section-tag">006 — Centres d'intérêt</p>
+    <h2 class="section-title">Au-delà <span>du code</span></h2>
+
+    <ul class="interests-wrap fade-up" aria-label="Loisirs">
+      <li class="interest-pill"><span class="pi" aria-hidden="true">🎵</span><span>Musique — R&amp;B, Rap</span></li>
+      <li class="interest-pill"><span class="pi" aria-hidden="true">💻</span><span>Développement logiciel</span></li>
+      <li class="interest-pill"><span class="pi" aria-hidden="true">📚</span><span>Lecture — Développement personnel</span></li>
+      <li class="interest-pill"><span class="pi" aria-hidden="true">🏋️</span><span>Sport — Musculation</span></li>
+      <li class="interest-pill"><span class="pi" aria-hidden="true">🎮</span><span>Jeu vidéo — FIFA</span></li>
+    </ul>
+  </section>
+
+  <!-- ══════════════════════════════
+       CONTACT
+  ══════════════════════════════ -->
+  <section id="contact" aria-label="Contact">
+    <div class="contact-wrap">
+
+      <div class="contact-left fade-up">
+        <p class="section-tag">007 — Contact</p>
+        <h2 class="section-title">Travaillons <span>ensemble</span></h2>
+        <p>
+          Ouvert aux opportunités, collaborations et échanges techniques.
+          N'hésitez pas à me contacter directement par téléphone ou par e-mail;
+          je réponds dans les plus brefs délais.
+        </p>
+        <address class="contact-links">
+          <a href="tel:0033784201781" class="contact-link">
+            <span class="cl-icon" aria-hidden="true">📞</span>+33 7 84 20 17 81
+          </a>
+          <a href="mailto:aurelgbaguidi@yahoo.com" class="contact-link">
+            <span class="cl-icon" aria-hidden="true">✉</span>aurelgbaguidi@yahoo.com
+          </a>
+          <a href="https://www.linkedin.com/in/delidji-gbaguidi/" target="_blank" rel="noopener noreferrer" class="contact-link">
+            <span class="cl-icon" aria-hidden="true">🔗</span>LinkedIn : Dèlidji GBAGUIDI
+          </a>
+          <span class="contact-link contact-link--static">
+            <span class="cl-icon" aria-hidden="true">📍</span>Rodez, France
+          </span>
+        </address>
+      </div>
+
+      <div class="contact-right fade-up fade-up--delay" aria-hidden="true">
+        <p class="cr-label">Ingénieur Logiciel</p>
+        <span class="big-init">DG</span>
+        <p class="cr-sub">Java · Spring Batch · DevOps<br>EFREI Paris · 74 Software SBS<br>Bénin → France 🇧🇯 → 🇫🇷</p>
+      </div>
+
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- EDUCATION -->
-<section id="education">
-  <div class="section-label">003 — Formation</div>
-  <h2>Éducation.</h2>
-  <div class="edu-grid">
-    <div class="edu-card">
-      <div class="edu-year">Août 2021 — Novembre 2024</div>
-      <div class="edu-school">EFREI Paris</div>
-      <div class="edu-degree">Cycle Ingénieur du Numérique · Villejuif, France</div>
-      <div class="edu-tags"><span class="tag">DevOps & CD</span><span class="tag">Cloud & Big Data</span><span class="tag">Prog. avancée</span><span class="tag">Secure Coding</span><span class="tag">Architecture logicielle</span></div>
-    </div>
-    <div class="edu-card" style="transition-delay:.1s">
-      <div class="edu-year">Octobre 2018 — Mai 2020</div>
-      <div class="edu-school">IUM</div>
-      <div class="edu-degree">Cycle Préparatoire Ingénieur · Abomey-Calavi, Bénin</div>
-      <div class="edu-tags"><span class="tag">Mathématiques</span><span class="tag">Physique</span><span class="tag">Électronique</span><span class="tag">Algorithmique</span><span class="tag">Communication</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- SOFTSKILLS -->
-<section id="softskills">
-  <div class="section-label">004 — Soft Skills</div>
-  <h2>Ce qui me<br>distingue.</h2>
-  <div class="softskills-grid fade-up">
-    <div class="soft-item"><div class="soft-emoji">🔄</div><div class="soft-name">Flexibilité</div></div>
-    <div class="soft-item"><div class="soft-emoji">📋</div><div class="soft-name">Organisation</div></div>
-    <div class="soft-item"><div class="soft-emoji">🎯</div><div class="soft-name">Autonomie</div></div>
-    <div class="soft-item"><div class="soft-emoji">🗣</div><div class="soft-name">Communication</div></div>
-    <div class="soft-item"><div class="soft-emoji">🧘</div><div class="soft-name">Patience</div></div>
-    <div class="soft-item"><div class="soft-emoji">🤝</div><div class="soft-name">Entraide</div></div>
-    <div class="soft-item"><div class="soft-emoji">⚡</div><div class="soft-name">Dynamisme</div></div>
-  </div>
-</section>
-
-<!-- INTERESTS -->
-<section id="interests">
-  <div class="section-label">005 — Centres d'intérêt</div>
-  <h2>Au-delà<br>du code.</h2>
-  <div class="interests-row fade-up">
-    <div class="interest-pill"><span class="pill-icon">🎵</span><span>Musique — R&amp;B, Rap</span></div>
-    <div class="interest-pill"><span class="pill-icon">💻</span><span>Développement logiciel</span></div>
-    <div class="interest-pill"><span class="pill-icon">📚</span><span>Lecture — Développement personnel</span></div>
-    <div class="interest-pill"><span class="pill-icon">🏋️</span><span>Sport — Musculation</span></div>
-    <div class="interest-pill"><span class="pill-icon">🎮</span><span>Jeu vidéo — FIFA</span></div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="contact-left fade-up">
-    <div class="section-label">006 — Contact</div>
-    <h2>Travaillons<br>ensemble.</h2>
-    <p>Ouvert aux opportunités, collaborations et échanges techniques. N'hésitez pas à me contacter.</p>
-    <div class="contact-links">
-      <a href="tel:0033784201781" class="contact-link"><span class="contact-link-icon">📞</span>+33 7 84 20 17 81</a>
-      <a href="mailto:aurelgbaguidi@yahoo.com" class="contact-link"><span class="contact-link-icon">✉</span>aurelgbaguidi@yahoo.com</a>
-      <a href="https://www.linkedin.com/in/d%C3%A8lidji-gbaguidi/" target="_blank" class="contact-link"><span class="contact-link-icon">🔗</span>LinkedIn — Dèlidji GBAGUIDI</a>
-      <div class="contact-link" style="cursor:default"><span class="contact-link-icon">📍</span>Rodez, France</div>
-    </div>
-  </div>
-  <div class="contact-right fade-up" style="transition-delay:.15s">
-    <div class="contact-right-title">Ingénieur Logiciel</div>
-    <span class="big-initial">DG</span>
-    <div class="contact-right-sub">Java · Spring Batch · DevOps<br>EFREI Paris · 74 Software SBS<br>Bénin → France 🇧🇯→🇫🇷</div>
-  </div>
-</section>
-
-<footer>
-  <span>© 2025 — Dèlidji Gbaguidi</span>
-  <span>Ingénieur en développement logiciel</span>
-  <span>Rodez, France</span>
-</footer>
-
-<script>
-/* CURSOR */
-if(window.matchMedia('(pointer:fine)').matches){
-  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
-  (function tick(){cursor.style.left=mx+'px';cursor.style.top=my+'px';rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(tick)})();
-  document.querySelectorAll('a,button,.skill-row,.soft-item,.interest-pill').forEach(el=>{
-    el.addEventListener('mouseenter',()=>{cursor.style.transform='translate(-50%,-50%) scale(2.5)';ring.style.opacity='0'});
-    el.addEventListener('mouseleave',()=>{cursor.style.transform='translate(-50%,-50%) scale(1)';ring.style.opacity='.5'});
-  });
-}
-
-/* HAMBURGER */
-const ham=document.getElementById('hamburger'),mob=document.getElementById('mobileMenu');
-function closeMobile(){ham.classList.remove('open');mob.classList.remove('open');document.body.style.overflow=''}
-function openMobile(){ham.classList.add('open');mob.classList.add('open');document.body.style.overflow='hidden'}
-ham.addEventListener('click',()=>ham.classList.contains('open')?closeMobile():openMobile());
-mob.addEventListener('click',e=>{if(e.target===mob)closeMobile()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMobile()});
-
-/* SCROLL REVEAL */
-const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.08});
-document.querySelectorAll('.fade-up,.timeline-item,.edu-card').forEach(el=>io.observe(el));
-document.querySelectorAll('.timeline-item').forEach((el,i)=>{el.style.transitionDelay=(i*.1)+'s'});
-</script>
-</body>
-</html>
+  <!-- ══════════════════════════════
+       FOOTER
+  ══════
