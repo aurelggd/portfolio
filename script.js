@@ -256,7 +256,7 @@ function initTypewriter() {
   let index = 0;
 
   /* Start typing after the word-reveal animation finishes */
-  const START_DELAY = 1300; // ms
+  const START_DELAY = 400;  // ms — starts quickly since no h1 animation to wait for
   const CHAR_DELAY  = 28;   // ms per character
 
   setTimeout(function type() {

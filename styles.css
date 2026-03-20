@@ -226,7 +226,7 @@ nav {
    5. MOBILE MENU
 ============================================= */
 .mobile-menu {
-  display: none;
+  display: flex;
   position: fixed;
   inset: 0;
   background: rgba(10, 10, 15, 0.97);
@@ -238,12 +238,14 @@ nav {
   backdrop-filter: blur(24px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
 }
 
 .mobile-menu.open {
   opacity: 1;
   pointer-events: all;
+  visibility: visible;
 }
 
 .mobile-menu a {
@@ -1081,7 +1083,7 @@ footer {
   .nav-links  { display: none; }
   .nav-badge  { display: none; }
   .hamburger  { display: flex; }
-  .mobile-menu { display: flex; }
+  /* .mobile-menu display handled globally */
 
   .about-wrapper  { grid-template-columns: 1fr; gap: 3rem; }
   .contact-wrap   { grid-template-columns: 1fr; }
@@ -1116,4 +1118,376 @@ footer {
   nav             { padding: 0 1rem; }
   .hero-eyebrow   { font-size: 0.6rem; }
   .soft-grid      { grid-template-columns: 1fr 1fr; }
+}
+
+/* =============================================
+   MOBILE OVERRIDES — comprehensive fix
+============================================= */
+
+/* ── TABLET (≤ 900px) ── */
+@media (max-width: 900px) {
+  .nav-links   { display: none; }
+  .nav-badge   { display: none; }
+  .hamburger   { display: flex; }
+  /* .mobile-menu display handled globally */
+  .about-wrapper { grid-template-columns: 1fr; gap: 2.5rem; }
+  .contact-wrap  { grid-template-columns: 1fr; }
+  .contact-right { display: none; }
+}
+
+/* ── MOBILE (≤ 600px) ── */
+@media (max-width: 600px) {
+  :root { --nav-h: 56px; --px: 1.1rem; }
+
+  section { padding: 3rem var(--px); }
+
+  /* Hero */
+  #hero {
+    padding-top: calc(var(--nav-h) + 1rem);
+    padding-bottom: 2.5rem;
+    padding-left: var(--px);
+    padding-right: var(--px);
+    justify-content: flex-end;
+  }
+  .hero-eyebrow { font-size: 0.6rem; letter-spacing: 0.12em; margin-bottom: 1rem; flex-wrap: wrap; justify-content: center; }
+  #heroTitle    { font-size: clamp(1.55rem, 7.5vw, 2.2rem); letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.2rem; }
+  .hero-sub     { font-size: 0.82rem; line-height: 1.65; margin-bottom: 1.8rem; min-height: auto; padding: 0; }
+  .hero-buttons { flex-direction: column; align-items: stretch; width: 100%; gap: 0.75rem; margin-bottom: 1.8rem; }
+  .btn-primary,
+  .btn-secondary { width: 100%; text-align: center; padding: 0.9rem 1rem; font-size: 0.82rem; }
+  .hero-meta    { flex-direction: column; align-items: center; gap: 0.5rem; }
+  .hero-meta a,
+  .hero-meta-location { font-size: 0.7rem; }
+
+  /* About */
+  .about-text p { font-size: 0.82rem; }
+  .skill-row    { flex-wrap: wrap; gap: 0.6rem; padding: 0.75rem 0.9rem; }
+  .skill-name   { width: 100%; min-width: unset; }
+  .tags         { width: 100%; }
+  .lang-row     { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+
+  /* Timeline */
+  .t-item     { padding-left: 1.8rem; padding-bottom: 2.2rem; }
+  .t-company  { font-size: 1rem; }
+  .t-role     { font-size: 0.7rem; }
+  .t-desc li  { font-size: 0.74rem; }
+
+  /* Cards */
+  .cards-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .card       { padding: 1.2rem; }
+  .card h3    { font-size: 0.9rem; }
+  .card p     { font-size: 0.76rem; }
+
+  /* Education */
+  .edu-grid   { grid-template-columns: 1fr; gap: 1rem; }
+
+  /* Softskills */
+  .soft-grid  { grid-template-columns: repeat(2, 1fr); }
+  .soft-item  { padding: 1rem; }
+  .soft-emoji { font-size: 1.3rem; }
+  .soft-name  { font-size: 0.75rem; }
+
+  /* Interests */
+  .interests-wrap { gap: 0.5rem; }
+  .interest-pill  { padding: 0.6rem 0.9rem; font-size: 0.67rem; }
+  .interest-pill .pi { font-size: 0.95rem; }
+
+  /* Contact */
+  .contact-link   { font-size: 0.75rem; padding: 0.8rem 0.9rem; }
+  .contact-left p { font-size: 0.8rem; }
+
+  /* Titles */
+  h2.section-title { font-size: clamp(1.6rem, 7vw, 2.2rem); margin-bottom: 1.8rem; }
+
+  /* Footer */
+  footer { flex-direction: column; text-align: center; gap: 0.3rem; padding: 1.2rem var(--px); }
+  footer span:nth-child(2) { display: none; }
+}
+
+/* ── SMALL MOBILE (≤ 380px) ── */
+@media (max-width: 380px) {
+  :root { --px: 0.9rem; }
+  nav           { padding: 0 var(--px); }
+  #heroTitle    { font-size: clamp(1.3rem, 8vw, 1.65rem); }
+  .hero-eyebrow { font-size: 0.55rem; }
+  .soft-grid    { grid-template-columns: 1fr 1fr; }
+  .t-item       { padding-left: 1.5rem; }
+  .interest-pill { padding: 0.5rem 0.75rem; font-size: 0.62rem; }
+}
+
+/* =============================================
+   HERO MOBILE — redesign complet
+============================================= */
+@media (max-width: 600px) {
+
+  /* Container : centré, padding généreux */
+  #hero {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: calc(var(--nav-h) + 2.5rem) 1.4rem 3rem;
+    gap: 0;
+  }
+
+  /* Eyebrow */
+  .hero-eyebrow {
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 1.4rem;
+    justify-content: center;
+    gap: 0.55rem;
+  }
+
+  /* Titre : taille fluide, bien centré */
+  #heroTitle {
+    font-size: clamp(1.75rem, 8.5vw, 2.4rem);
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.4rem;
+    max-width: 100%;
+    padding: 0 0.2rem;
+  }
+
+  /* Sous-titre typewriter */
+  .hero-sub {
+    font-size: 0.8rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    min-height: auto;
+    max-width: 92%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ── Boutons : colonne, pleine largeur, effet glow ── */
+  .hero-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 320px;
+    gap: 0.75rem;
+    margin: 0 auto 2rem;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    border-radius: 12px;
+    letter-spacing: 0.04em;
+    box-shadow: 0 0 20px rgba(124,58,237,0.35), 0 0 40px rgba(6,182,212,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Shimmer effect sur btn-primary mobile */
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -75%;
+    width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    animation: btnShimmer 2.5s ease-in-out 2s infinite;
+  }
+
+  @keyframes btnShimmer {
+    0%   { left: -75%; }
+    100% { left: 125%; }
+  }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    font-size: 0.88rem;
+    border-radius: 12px;
+    letter-spacing: 0.04em;
+    background: rgba(124,58,237,0.07);
+    border: 1px solid rgba(124,58,237,0.35);
+  }
+
+  /* ── Meta contacts : grille 2×2 propre ── */
+  .hero-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .hero-meta a,
+  .hero-meta-location {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-size: 0.62rem;
+    padding: 0.55rem 0.5rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hero-meta a:active,
+  .hero-meta a:hover {
+    background: rgba(124,58,237,0.1);
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  /* LinkedIn + location sur toute la largeur */
+  .hero-meta a:nth-child(3),
+  .hero-meta-location {
+    grid-column: span 1;
+  }
+}
+
+/* ── TRÈS PETIT MOBILE (≤ 380px) ── */
+@media (max-width: 380px) {
+  #heroTitle { font-size: clamp(1.5rem, 9vw, 1.9rem); }
+
+  .hero-buttons,
+  .hero-meta  { max-width: 100%; }
+
+  .hero-meta a,
+  .hero-meta-location { font-size: 0.58rem; padding: 0.5rem 0.35rem; }
+}
+
+/* =============================================
+   HERO TICKER — défilement droite → gauche
+============================================= */
+
+/* Wrapper: masque le débordement, pleine largeur */
+.hero-ticker {
+  width: 100vw;
+  margin-left: calc(-1 * var(--px));   /* déborde des marges section */
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2rem;
+  /* ligne de séparation subtile */
+  border-top: 1px solid rgba(124,58,237,0.2);
+  border-bottom: 1px solid rgba(124,58,237,0.2);
+  padding: 0.9rem 0;
+  /* atténuation aux bords */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+/* Track: alignement horizontal, animation */
+.hero-ticker__track {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5rem;
+  white-space: nowrap;
+  animation: tickerScroll 18s linear infinite;
+  will-change: transform;
+}
+
+/* Pause au survol (desktop) */
+@media (pointer: fine) {
+  .hero-ticker:hover .hero-ticker__track { animation-play-state: paused; }
+}
+
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Texte du ticker */
+.hero-ticker__item {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  letter-spacing: -0.03em;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* Mots en dégradé animé */
+.hero-ticker__item em {
+  font-style: normal;
+  background: linear-gradient(90deg, #7c3aed, #06b6d4, #a855f7, #06b6d4, #7c3aed);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShiftTicker 4s linear infinite;
+}
+
+@keyframes gradientShiftTicker {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Séparateur ✦ */
+.hero-ticker__sep {
+  font-size: 1.2rem;
+  color: var(--accent2);
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+/* ── Logo nav : taille adaptée au nom complet ── */
+.logo {
+  font-size: clamp(0.75rem, 2vw, 1rem);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* ── Boutons hero : toujours centrés, même largeur ── */
+.hero-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeSlideUp 0.6s ease 0.8s forwards;
+  width: 100%;
+}
+
+.btn-primary,
+.btn-secondary {
+  min-width: 180px;
+  text-align: center;
+}
+
+/* Mobile : colonne + pleine largeur */
+@media (max-width: 600px) {
+  .hero-ticker {
+    margin-left: calc(-1 * var(--px));
+    padding: 0.75rem 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-ticker__item {
+    font-size: clamp(1.3rem, 6vw, 1.8rem);
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    max-width: 300px;
+    min-width: unset;
+  }
 }
